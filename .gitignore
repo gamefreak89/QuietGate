@@ -1,0 +1,15 @@
+.gradle/
+**/build/
+local.properties
+*.jks
+*.keystore
+*.log
+*.apk
+*.apks
+.idea/
+
+__pycache__/
+*.pyc
+*.zip
+QuietGate-call-catalog*.json
+*call-catalog*.json
