@@ -18,3 +18,7 @@ Current deliverables are development/debug signed. Keep the existing development
 ## GitHub releases
 
 Push reviewed source to the private repository first. A tag/release can later carry the versioned APK, source.zip, documentation and checksum file. No automatic publication workflow is enabled. Source folders and local release bundles are separate so binaries and private call catalogs do not enter source history accidentally.
+
+## Mandatory disclosure for every release
+
+Follow AGENTS.md. Update RELEASE-README.md with the exact version. Include it in the local folder and as a standalone GitHub release asset; summarize permissions, included files, privacy, licensing and known limitations directly in release notes. Maintain the front-page README. Packaging refuses missing/empty docs, absent disclosure sections, or a version mismatch before creating output. Existing release corrections are labeled documentation supplements.
