@@ -2,6 +2,16 @@
 
 QuietGate is a separate Android app that watches Google Meet notifications and checks exposed caller emails or phone numbers against contacts on this device. An unknown caller is declined only when Meet provides an explicit `Decline` or `Reject` notification action.
 
+## Originality and free distribution
+
+QuietGate is an independently developed project maintained in **[gamefreak89/QuietGate](https://github.com/gamefreak89/QuietGate)**. Its development history, source and AI-assistance disclosure are documented here. “Original” identifies this project's origin; it does not claim that every idea is unique or that third-party dependencies were written by this project. QuietGate is not an official Google or Shizuku product.
+
+**Official QuietGate builds are free. No purchase, subscription, activation fee or payment is required to use the official app.**
+
+If someone offers a reproduction or repackaged copy for money while claiming it is the official QuietGate, **do not pay for it or install it**. Use only downloads linked from this repository's [official Releases page](https://github.com/gamefreak89/QuietGate/releases). Avoid unverified APKs, payment-to-unlock offers and copies with unclear provenance or modifications. This repository is currently private, so authorized testers need access to view its releases.
+
+**License clarification:** QuietGate uses the MIT license, which permits modification, redistribution and sale when its terms are followed. A paid fork is not automatically unauthorized or malicious. Such forks are separate from the free official build; this notice is a distribution and impersonation warning, not a prohibition on rights granted by [LICENSE](LICENSE).
+
 ## What is included in 0.7-alpha
 
 - Android development/debug APK with Meet notification-based contact matching, best-effort decline actions, status notification and 24-hour grace countdown.
