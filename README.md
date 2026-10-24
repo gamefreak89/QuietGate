@@ -2,6 +2,22 @@
 
 QuietGate is a separate Android app that watches Google Meet notifications and checks exposed caller emails or phone numbers against contacts on this device. An unknown caller is declined only when Meet provides an explicit `Decline` or `Reject` notification action.
 
+## What is included in 0.7-alpha
+
+- Android development/debug APK with Meet notification-based contact matching, best-effort decline actions, status notification and 24-hour grace countdown.
+- Local rejected-call catalog with JSON import/export, categories, filters and notes (500 newest records within 90 days).
+- Complete Java/XML source, build configuration, instrumentation source and release packaging helper.
+- Privacy policy, permission explanations, MIT/third-party licenses, AI-assistance disclosure, changelog and verification limitations.
+- GitHub release assets: APK, source.zip, complete release-folder ZIP, checksums and a standalone release README/disclosure.
+
+### Permissions at a glance
+
+Contacts access checks caller identities. Notification Access reads Meet call notices and invokes available actions; Android grants broad notification access even though the code filters to Meet. Notification permission and foreground-service declarations support the status notice. Network-state access checks Wi-Fi; boot access requests restoration; Shizuku authorization checks readiness. Import/export uses files explicitly selected through Android's picker. See [PERMISSIONS.md](PERMISSIONS.md) for the full breakdown.
+
+No INTERNET, microphone, conversation recording, Android call-log, phone-state, location or overlay permission is requested. Catalog exports contain caller identities and notes; selecting a cloud document provider may upload through that provider. See [PRIVACY.md](PRIVACY.md).
+
+**Alpha disclosure:** rejection can occur after ringing; caller identity and call-ending outcomes are not authenticated or independently confirmed. New catalog import/export flows have not yet received functional testing. No security/store/F-Droid certification is claimed.
+
 ## Shizuku and root requirements
 
 > **QuietGate currently requires Shizuku to be running and authorized when protection is enabled. Root is optional; root alone does not replace Shizuku authorization.**
