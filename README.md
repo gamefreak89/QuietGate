@@ -2,6 +2,17 @@
 
 QuietGate is a separate Android app that watches Google Meet notifications and checks exposed caller emails or phone numbers against contacts on this device. An unknown caller is declined only when Meet provides an explicit `Decline` or `Reject` notification action.
 
+## Shizuku and root requirements
+
+> **QuietGate currently requires Shizuku to be running and authorized when protection is enabled. Root is optional; root alone does not replace Shizuku authorization.**
+
+- **Without root:** start Shizuku using a supported debugging method and authorize QuietGate. Shizuku generally needs restarting after a device reboot.
+- **With root:** Shizuku can be started using root, but QuietGate still checks its running/authorized state. Rooted configurations have not been verified in our device tests.
+- **Wi-Fi:** the current build also requires active Wi-Fi to enable protection. Losing either Wi-Fi or authorized Shizuku starts the 24-hour grace countdown, including on rooted devices.
+- **Call blocking remains best effort:** neither root nor Shizuku guarantees interception before ringing or successful rejection. QuietGate uses the explicit Decline/Reject action exposed by Meet.
+
+See the [official Shizuku setup guide](https://shizuku.rikka.app/guide/setup/) for startup methods.
+
 ## Background behavior
 
 The Android notification-listener service is system-bound after the user grants Notification Access. It can receive notification events after the launcher activity is swiped out of Recents. While protection is enabled, QuietGate also shows an ongoing low-priority foreground-service notification. It reports listener connection, Wi-Fi/Shizuku readiness, and the grace countdown. Android 13+ notification permission is required for the notice to appear normally in the notification drawer. Android or a phone maker can still restrict or stop background components; the foreground service improves visibility but cannot guarantee survival.
