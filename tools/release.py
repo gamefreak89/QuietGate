@@ -4,7 +4,7 @@ import argparse, hashlib, json, re, shutil, zipfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-DOCS = ["README.md", "PRIVACY.md", "PERMISSIONS.md", "FOSS.md", "AI-DISCLOSURE.md", "CHANGELOG.md", "DEVICE-VERIFICATION.md", "LICENSE", "RELEASING.md"]
+DOCS = ["RELEASE-README.md", "README.md", "PRIVACY.md", "PERMISSIONS.md", "FOSS.md", "AI-DISCLOSURE.md", "CHANGELOG.md", "DEVICE-VERIFICATION.md", "LICENSE", "RELEASING.md"]
 EXCLUDED = {".git", ".gradle", "build", ".idea", "__pycache__", "releases"}
 def allowed(path):
     rel = path.relative_to(ROOT)
@@ -19,6 +19,16 @@ def main():
     code = int(re.search(r"versionCode (\d+)", config).group(1))
     if not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._-]*", version):
         parser.error("Invalid version name")
+    for name in DOCS:
+        doc = ROOT / name
+        if not doc.is_file() or not doc.read_text(encoding="utf-8").strip():
+            parser.error("Required release documentation missing or empty: " + name)
+    disclosure = (ROOT / "RELEASE-README.md").read_text(encoding="utf-8")
+    if version not in disclosure.splitlines()[0]:
+        parser.error("RELEASE-README.md heading must identify the current version")
+    for heading in ["## Included files", "## Permissions and setup", "## Privacy and local data", "## FOSS and licenses", "## Languages and AI assistance", "## Changes in this release", "## Verification and limitations"]:
+        if heading not in disclosure:
+            parser.error("Missing release disclosure section: " + heading)
     apk = args.apk.resolve()
     if not apk.is_file() or not zipfile.is_zipfile(apk):
         parser.error("Provide an existing APK archive")
