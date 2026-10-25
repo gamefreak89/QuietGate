@@ -4,7 +4,7 @@ import argparse, hashlib, json, re, shutil, zipfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-DOCS = ["RELEASE-README.md", "README.md", "PRIVACY.md", "PERMISSIONS.md", "FOSS.md", "AI-DISCLOSURE.md", "CHANGELOG.md", "DEVICE-VERIFICATION.md", "LICENSE", "RELEASING.md"]
+DOCS = ["RELEASE-README.md", "README.md", "PRIVACY.md", "PERMISSIONS.md", "FOSS.md", "AI-DISCLOSURE.md", "CHANGELOG.md", "DEVICE-VERIFICATION.md", "LICENSE", "RELEASING.md", "GOOGLE-CONTACTS-SETUP.md"]
 EXCLUDED = {".git", ".gradle", "build", ".idea", "__pycache__", "releases"}
 def allowed(path):
     rel = path.relative_to(ROOT)

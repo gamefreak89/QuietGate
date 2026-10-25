@@ -39,3 +39,23 @@ The new local catalog compiled and the APK was installed as an update. The earli
 ## 0.7-alpha catalog organization
 
 Compiled successfully and installed as an update. Added bounded JSON import, full catalog export, duplicate detection, imported-entry labels, category filters and editable notes. No new automated or device functional tests were run for these import/export flows. Existing controlled-test results apply to the earlier core call-screening behavior.
+# 0.8-alpha incident export verification — 2026-10-24
+
+- `assembleDebug lintDebug` completed successfully with Android SDK/build-tools 35, Gradle 8.9 and JDK 17.
+- Lint: 0 errors, 18 warnings (localization, existing backup/icon/obsolete-version concerns). Compilation also reports existing Shizuku annotation/deprecated-API warnings.
+- The existing instrumentation source received a targeted lint suppression for the receiver overload used only below API 33; API 33+ already uses RECEIVER_NOT_EXPORTED. No new tests were added or executed.
+- `apksigner verify --print-certs` succeeded for the new APK and archived 0.7-alpha APK. Their SHA-256 signing-certificate digests match. This supports update compatibility; no device installation is claimed.
+- Source review covered individual record selection, re-reading for edits/expiry/clearing, imported labels, UTC/epoch timestamps, attachment limits, safe numbered ZIP paths, streamed hashing, checksum coverage, background I/O, error reporting and private temporary-file cleanup on normal completion/failure.
+- Device functional checks remain pending: file-picker grants across recreation/process death, local/cloud providers, cancellation, unreadable/oversized attachments, low storage, report correctness/hash comparison, interrupted exports, and existing catalog JSON flows. Static analysis and compilation do not demonstrate those behaviors.
+- No phone data or real caller identities were collected for this change. No new runtime permissions were added.
+
+# 0.9-alpha optional Google contacts — 2026-10-24
+
+- `assembleDebug lintDebug` completed successfully for versionCode 10 / 0.9-alpha with Google Play services Auth 22.0.0. Lint reports 0 errors and 16 warnings; compilation notes deprecated Android UI APIs.
+- `apksigner verify --print-certs` passed. The signing certificate matches the development certificate used for 0.7/0.8-alpha, and its public SHA-1 is documented for Android OAuth registration.
+- Reviewed the merged manifest: INTERNET is the new app permission; no GET_ACCOUNTS, microphone, phone-state, call-log, location, overlay, ads identifier or analytics-provider declaration was added.
+- Source review covered explicit account choice/scope checking, fixed-host HTTPS requests with redirects disabled, field/source-limited pagination, response/identifier/account bounds, no partial activation, local-only caller matching, 24-hour expiry, failed-refresh pause, encrypted no-backup cache, Keystore-protected keys, token non-persistence, exports staying separate, and generation checks preventing late reconnect after disconnect/deletion.
+- Full Google AAR third-party notices are bundled unchanged; Google client licensing is disclosed separately from MIT app code.
+- No new cloud tests, device installation, real-account authorization, download, matching, refresh expiry or remote revocation verification were performed. External Google Cloud Android OAuth registration and People API enablement are absent. Code compilation/static analysis is not evidence of live Google integration working.
+- Earlier 0.8-alpha incident/catalog verification is historical and does not cover the Google connection feature. The installed phone build remains 0.8-alpha.
+

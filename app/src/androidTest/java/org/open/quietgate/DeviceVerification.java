@@ -37,6 +37,8 @@ public final class DeviceVerification extends Instrumentation {
     private static final String UNKNOWN = "quietgate-device-test@example.invalid";
 
     @Override public void onCreate(Bundle args) { super.onCreate(args); arguments = args; start(); }
+    // The legacy overload below is reached only before API 33; newer versions use NOT_EXPORTED.
+    @android.annotation.SuppressLint("UnspecifiedRegisterReceiverFlag")
     @Override public void onStart() {
         target = getTargetContext();
         if (arguments != null && "true".equals(arguments.getString("probe"))) { probeContacts(); return; }

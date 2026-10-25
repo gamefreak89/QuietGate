@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.9-alpha — 2026-10-24
+
+- Added optional user-chosen, read-only Google saved-contact connections and manual refresh.
+- Added encrypted app-private no-backup account snapshots containing keyed identifier fingerprints; no tokens or raw contact lists are persisted.
+- Added last-refresh/account status, 24-hour matching expiry, disconnect/cache deletion, Google revocation request and delete-all key erasure.
+- Added Google Identity Services Auth 22.0.0 and INTERNET. No Other contacts, Gmail, directory or names request; no QuietGate backend.
+- Contact decisions use available device contacts plus fresh completed connected snapshots without network requests during calls.
+- Added bounded HTTPS People API fetching, pagination, no partial-list activation and generation checks against late completion after disconnect.
+- Google Cloud Android OAuth registration and People API enablement are external prerequisites; live Google authorization/sync/revocation are not verified.
+
+## 0.8-alpha — 2026-10-24
+
+- Added incident ZIP export for individually selected retained catalog records.
+- Added incident title/notes and optional user-selected attachments (10 files; 10 MiB each / 25 MiB total).
+- Included readable and JSON reports, UTC and epoch timestamps, imported/source labels, attachment names, original bytes, and SHA-256 manifest.
+- Export uses a private temporary ZIP before writing the destination; errors do not claim success.
+- No new Android permissions or changes to contact matching, rejection or existing JSON import/export.
+- Compilation/static analysis status is recorded in DEVICE-VERIFICATION.md. Device functional checks remain pending.
+
 These are feature milestones reconstructed from the available development history. Older binaries are not reconstructed or represented as preserved releases.
 
 ## 0.7-alpha — 2026-10-24

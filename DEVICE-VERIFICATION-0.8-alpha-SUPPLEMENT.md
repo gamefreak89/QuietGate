@@ -1,0 +1,9 @@
+# QuietGate 0.8-alpha device verification supplement — 2026-10-24
+
+After backing up the installed 0.7-alpha APK and app-private data, 0.8-alpha installed in update mode. Preferences were unchanged immediately after installation. Sixteen synthetic device checks passed with zero failures on the final run: selection/empty state, attachment selection result and duplicate handling, background ZIP save, selected-record/provenance/notes/timestamp preservation, exact attachment bytes and checksum coverage, safe ZIP paths, empty/too-many/unreadable/oversized input rejection, aggregate size enforcement, actual Android local file-picker save, clearing before export, and catalog JSON round-trip/duplicate-edit preservation.
+
+An initial picker automation race was corrected by waiting for the actual system-provider package and exact controls. No app code or APK fix was required. Attachment selection callbacks used synthetic local-file URIs; destination saving used the real Android DocumentsUI provider. Original catalog and protection settings were restored/preserved; readiness logs updated during lifecycle changes. Temporary test files and the test APK were removed, notification access restored and protection readiness confirmed.
+
+No real call was placed. Cloud providers, cancellation, process death, rotation, low storage, full retention boundaries, long-duration operation and backup restoration remain unverified. Existing historical core results are not a fresh call-screening certification. No personal call data, contacts, backup data or device identifiers are included here.
+
+This supplement does not replace the original 0.8-alpha APK, source archive, checksums or original verification disclosure. Source for the new synthetic checks is in app/src/androidTest/java/org/open/quietgate/IncidentVerification.java.

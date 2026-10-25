@@ -103,7 +103,7 @@ public class MeetRejectListener extends NotificationListenerService {
             boolean match = identifier != null && ContactMatcher.isSavedContact(this, identifier);
             if (match) {
                 RejectedCallStore.clearIdentity(this, identifier);
-                GuardLog.add(this, "Allowed", "Caller " + identifierKind(identifier) + " matches a device contact");
+                GuardLog.add(this, "Allowed", "Caller " + identifierKind(identifier) + " matches device or connected saved contacts");
                 return;
             }
             if (!mayActNow()) return;
@@ -113,7 +113,7 @@ public class MeetRejectListener extends NotificationListenerService {
                 CallCatalog.add(this, identifier, true);
                 main.post(this::cleanupRejectedAlerts);
                 GuardLog.add(this, "Decline invoked Â· unconfirmed", identifier == null
-                        ? "Caller identifier unavailable; Meet action was invoked" : "Caller " + identifierKind(identifier) + " not found in device contacts; Meet action was invoked");
+                        ? "Caller identifier unavailable; Meet action was invoked" : "Caller " + identifierKind(identifier) + " not found in available saved contacts; Meet action was invoked");
             } catch (PendingIntent.CanceledException | RuntimeException e) {
                 CallCatalog.add(this, identifier, false);
                 GuardLog.add(this, "Decline failed", "Meet action could not be invoked");
