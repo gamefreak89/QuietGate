@@ -5,6 +5,8 @@
 | Permission/access | Purpose |
 | --- | --- |
 | READ_CONTACTS | Match Meet-exposed caller email/number against locally available Contacts. |
+| INTERNET (new in 0.9-alpha) | Optional Google authorization and user-started saved-contact refresh over HTTPS. No caller identifier is uploaded for matching. |
+| Google OAuth contacts.readonly (optional, per chosen account) | Google permits read-only saved-contact access; requests fetch only email/phone fields. Not Gmail, Other contacts or directory access. |
 | Android Notification Access / BIND_NOTIFICATION_LISTENER_SERVICE | Android binds the listener after approval; read Meet call notices and invoke an explicit Decline/Reject action. Access is broader than the package filter in code. |
 | POST_NOTIFICATIONS | Display the ongoing QuietGate status notice on Android 13+. |
 | ACCESS_NETWORK_STATE | Determine whether the active network is Wi-Fi for the grace deadline. |
@@ -16,4 +18,4 @@
 
 The Shizuku provider has an INTERACT_ACROSS_USERS_FULL component guard; this is not a runtime request for QuietGate to gain that system privilege. The Shizuku library contributes its authorization declaration to the merged manifest.
 
-Not requested: INTERNET, RECORD_AUDIO, READ_CALL_LOG, READ_PHONE_STATE, location, SYSTEM_ALERT_WINDOW. Call catalogs are app data, not Android system call logs.
+Not requested: GET_ACCOUNTS, RECORD_AUDIO, READ_CALL_LOG, READ_PHONE_STATE, location, SYSTEM_ALERT_WINDOW. Android's account chooser supplies only the user's chosen account; no silent account enumeration is added. Call catalogs are app data, not Android system call logs.

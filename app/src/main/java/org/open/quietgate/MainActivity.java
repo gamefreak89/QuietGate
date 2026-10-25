@@ -95,6 +95,7 @@ public class MainActivity extends Activity {
             getSharedPreferences(LeaseManager.PREFS, MODE_PRIVATE).edit().putBoolean(RejectedCallStore.KEY_QUIET, !quiet).apply(); render();
         });
         addButton("Rejected-call catalog", v -> showCatalog());
+        addButton("Connected Google saved contacts (optional)", v -> startActivity(new Intent(this, GoogleContactsActivity.class)));
         addButton("Refresh status", v -> { LeaseManager.refreshCurrent(this); render(); });
         addButton("About, privacy, permissions & licenses", v -> showAbout());
         addButton("Clear local history & fingerprints", v -> {
@@ -107,13 +108,13 @@ public class MainActivity extends Activity {
         section("Save the caller's Meet identity");
         paragraph("Save the exact Google email used by a known Meet caller in Contacts on this phone. A contact saved only by phone number will not match an unfamiliar email. QuietGate cannot link an email to a phone number automatically. Check both saved and unsaved test callers before relying on protection.");
         section("All receiving accounts · quieter rejection alerts");
-        paragraph("The same contact rule applies to Meet calls arriving at any Google account in this Android profile. QuietGate checks device Contacts, including synced entries available here; it does not scan cloud accounts. A separate work profile may require its own setup.");
+        paragraph("The same rule applies to Meet calls arriving at any Google account in this Android profile. Device Contacts includes synced entries available here. Optionally connect individual Google accounts to refresh their saved emails/numbers directly from Google. Matching uses an encrypted local snapshot valid for 24 hours; refresh is manual. Google Other contacts are excluded. A separate work profile requires its own setup.");
         paragraph("Quiet mode dismisses missed-call alerts tied to recent rejection attempts. It matches call keys/tags, or an exact single-caller identity within two minutes when Meet changes the notification key. Active calls, group summaries, and messages stay visible. An allowed caller clears its identity match. Android may show or sound an alert briefly before cleanup. Meet's internal history and QuietGate's status notice remain available.");
         section("Shizuku and the 24-hour grace timer");
         paragraph("If either Wi-Fi or authorized Shizuku becomes unavailable, the 24-hour countdown starts. Both must return before the deadline to reset it. At expiry protection turns off; reconnect Wi-Fi, start and authorize Shizuku, then tap Enable protection. Reconnecting after expiry does not automatically turn protection back on. Android may delay background alarms, so expiry is also checked before call actions and when the app opens.");
         paragraph("Shizuku does not give this app a Google Meet call-control API, access to other apps’ private data, or contacts from other devices. It does not make rejection stronger. Meet still has to show this app a call notification and an explicit Decline/Reject action. The call may ring first; success cannot be confirmed.");
         section("Privacy");
-        paragraph("QuietGate checks only Meet notifications and device contacts. It has no internet, microphone, audio-recording, call-log, phone-state, location, or overlay permission. Contact matching and history stay on this phone. The rejected-call catalog stores caller emails or numbers exposed by Meet and attempt times, up to 500 entries for 90 days. Expired entries are pruned when the catalog is read or written. Export only to a location you trust; exported copies are outside app control.");
+        paragraph("QuietGate checks Meet notifications and device contacts, plus fresh local matches from Google accounts you explicitly connect. INTERNET supports optional Google authorization and manual saved-contact refresh. No microphone, audio-recording, call-log, phone-state, location or overlay access is requested. No caller identifier is sent to Google for matching. No QuietGate server receives your contacts. Connected-account labels and keyed contact fingerprints are encrypted in app-private no-backup storage; tokens are handled by Google Play services and are not saved in QuietGate files. Disconnect removes the local account cache and requests Google revocation. Incident/catalog exports do not include connected-account labels or contact lists; actual call records can still contain the caller email/number. The catalog retains 500 newest attempts within 90 days. Export only to a location you trust.");
 
         section("Recent decisions");
         java.util.List<String> events = GuardLog.recent(this);

@@ -49,3 +49,13 @@ Compiled successfully and installed as an update. Added bounded JSON import, ful
 - Device functional checks remain pending: file-picker grants across recreation/process death, local/cloud providers, cancellation, unreadable/oversized attachments, low storage, report correctness/hash comparison, interrupted exports, and existing catalog JSON flows. Static analysis and compilation do not demonstrate those behaviors.
 - No phone data or real caller identities were collected for this change. No new runtime permissions were added.
 
+# 0.9-alpha optional Google contacts — 2026-10-24
+
+- `assembleDebug lintDebug` completed successfully for versionCode 10 / 0.9-alpha with Google Play services Auth 22.0.0. Lint reports 0 errors and 16 warnings; compilation notes deprecated Android UI APIs.
+- `apksigner verify --print-certs` passed. The signing certificate matches the development certificate used for 0.7/0.8-alpha, and its public SHA-1 is documented for Android OAuth registration.
+- Reviewed the merged manifest: INTERNET is the new app permission; no GET_ACCOUNTS, microphone, phone-state, call-log, location, overlay, ads identifier or analytics-provider declaration was added.
+- Source review covered explicit account choice/scope checking, fixed-host HTTPS requests with redirects disabled, field/source-limited pagination, response/identifier/account bounds, no partial activation, local-only caller matching, 24-hour expiry, failed-refresh pause, encrypted no-backup cache, Keystore-protected keys, token non-persistence, exports staying separate, and generation checks preventing late reconnect after disconnect/deletion.
+- Full Google AAR third-party notices are bundled unchanged; Google client licensing is disclosed separately from MIT app code.
+- No new cloud tests, device installation, real-account authorization, download, matching, refresh expiry or remote revocation verification were performed. External Google Cloud Android OAuth registration and People API enablement are absent. Code compilation/static analysis is not evidence of live Google integration working.
+- Earlier 0.8-alpha incident/catalog verification is historical and does not cover the Google connection feature. The installed phone build remains 0.8-alpha.
+

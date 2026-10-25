@@ -1,5 +1,11 @@
 THIRD-PARTY NOTICES
 
+Google Play services Auth 22.0.0 and transitive Google client libraries
+Google's Maven POM identifies the Android Software Development Kit License.
+Terms: https://developer.android.com/studio/terms.html
+These libraries and Google Play services are not covered by QuietGate's MIT license; the entire runtime/dependency stack is not entirely FOSS.
+Bundled third-party notices: GOOGLE-AUTH-THIRD-PARTY-LICENSES.txt, accessible from the optional Google saved-contacts screen.
+
 Shizuku API, provider, shared and AIDL modules, version 13.1.5
 Copyright (c) 2021 RikkaW. MIT License.
 Source: https://github.com/RikkaApps/Shizuku-API

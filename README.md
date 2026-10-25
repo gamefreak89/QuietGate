@@ -1,4 +1,14 @@
-# QuietGate 0.8-alpha
+# QuietGate 0.9-alpha
+
+## Optional connected Google saved contacts (0.9-alpha)
+
+Open **Connected Google saved contacts (optional)**. Choose each account through Android's account picker, approve Google's read-only saved-contact scope, and refresh its saved emails/phone numbers. This requires a configured Google Cloud project: see [Google contacts setup](GOOGLE-CONTACTS-SETUP.md). No Cloud project, OAuth registration or successful live authorization is claimed by this build.
+
+Google Other contacts, directories, Gmail and contact names are not requested. The scope permits reading saved contacts; actual People API requests limit fields to email addresses and phone numbers and sources to CONTACT. No caller identifier is sent to Google. Matching uses local keyed fingerprints in an AES-GCM encrypted, app-private no-backup file; Android Keystore protects its keys. Tokens are handled by Google Play services, used in memory for refresh, and never written to QuietGate files or exports. There is no QuietGate backend.
+
+Refresh is manual and pauses the account's cloud matching until the full bounded fetch succeeds. A snapshot allows matches for 24 hours using the device clock; expired, failed or pending snapshots are not used. Google-side edits/revocation/account removal are not immediately visible offline. Refresh or expiry updates their effect. Up to 10 chosen accounts and 20,000 unique identifier fingerprints per account; incomplete/oversized fetches never activate partial lists. Disconnect deletes the local account cache and requests Google revocation; failures show how to revoke manually. Delete-all erases local account data and encryption keys, with Google grants managed separately. Device contacts and their existing matching remain available.
+
+**INTERNET is new in this version**, for Google authorization/manual refresh. No analytics, ads, automatic contact upload or cloud matching service is added. Connected-account labels and contact caches are excluded from catalog/incident exports; actual call records can still include caller identities. The included Google Play services library uses Google's SDK terms, so the complete dependency stack is not entirely FOSS. The app source remains MIT. Live Google authorization, download and revocation await external OAuth/API setup and verification.
 
 ## Incident reports (0.8-alpha)
 
@@ -32,7 +42,7 @@ If someone offers a reproduction or repackaged copy for money while claiming it 
 
 Contacts access checks caller identities. Notification Access reads Meet call notices and invokes available actions; Android grants broad notification access even though the code filters to Meet. Notification permission and foreground-service declarations support the status notice. Network-state access checks Wi-Fi; boot access requests restoration; Shizuku authorization checks readiness. Import/export uses files explicitly selected through Android's picker. See [PERMISSIONS.md](PERMISSIONS.md) for the full breakdown.
 
-No INTERNET, microphone, conversation recording, Android call-log, phone-state, location or overlay permission is requested. Catalog exports contain caller identities and notes; selecting a cloud document provider may upload through that provider. See [PRIVACY.md](PRIVACY.md).
+INTERNET supports optional Google authorization/manual saved-contact refresh. No microphone, conversation recording, Android call-log, phone-state, location or overlay permission is requested. Catalog exports contain caller identities and notes; selecting a cloud document provider may upload through that provider. See [PRIVACY.md](PRIVACY.md).
 
 **Alpha disclosure:** rejection can occur after ringing; caller identity and call-ending outcomes are not authenticated or independently confirmed. New catalog import/export flows have not yet received functional testing. No security/store/F-Droid certification is claimed.
 
@@ -57,11 +67,11 @@ QuietGate integrates the official Shizuku API for authorization status. Shizuku 
 
 When enabled, protection requires the user to grant contacts access, Notification Access, and Shizuku authorization. A 24-hour grace timer starts whenever either Wi-Fi or the authorized Shizuku service becomes unavailable. Restoring both before the timer expires resets it. If either remains unavailable for 24 hours, protection switches off. The timer state is local and survives reboot; its alarm is quiet. Android may defer alarms while the device is idle, so the app also checks and expires the lease on app resume and before handling each Meet notification.
 
-Contact matching is only against the Android contact provider on this phone. That provider can aggregate device, SIM, and synced-account entries; this version checks the address book available on the phone without filtering by account type. It does not search Google accounts or other devices independently. Emails match exactly apart from case; phone numbers match only when their digit sequences are identical after punctuation is removed. Names alone are not accepted as a match.
+Device contact matching uses Android's contact provider, which can aggregate device, SIM and synced-account entries without an account filter. Optionally, fresh local snapshots from individually connected Google accounts add saved-contact matches. Emails match ignoring case; phone matches require identical digit sequences after supported punctuation is removed. No suffix or name-only matches are accepted; no email-to-phone identity link is inferred.
 
 QuietGate rejects calls only with Meet's explicit `Decline` or `Reject` action. Optional quiet mode uses `cancelNotification()` separately, only for a non-ongoing `missed_call` notification associated with a recent rejection attempt. It first matches the notification key or tag (15-minute window). Meet may change both, so an exact single-caller email/phone title can also match a salted caller fingerprint for two minutes. A new incoming call clears the prior identity-only window for that caller before its decision, preserving later calls that are allowed or cannot be rejected. Active calls, group summaries, messages, and unmatched missed-call alerts remain visible. The bounded local store keeps at most 128 hashed fingerprints; raw identities are not stored there, and expired entries are pruned on new records. Existing unrelated notifications are not bulk-cleared. Android may briefly display or sound an alert before the listener can dismiss it. Meet's internal history remains unchanged.
 
-The contact rule applies to all receiving Google accounts handled by Meet in this Android profile. No destination-account filter or Google account permission is used. The app checks the device Contacts provider, including synced entries available there; it does not query cloud address books or independently cover a separate work profile.
+The contact rule applies to all receiving Google accounts handled by Meet in this Android profile. No destination-account filter is used. Cloud saved-contact access is optional and separately authorized per chosen account. Separate work profiles are not independently covered by this installation.
 
 ## Limitations
 
@@ -75,7 +85,7 @@ This remains best effort: Android has no public API for screening an incoming Me
 - `RECEIVE_BOOT_COMPLETED`: restores the local grace timer after reboot.
 - Shizuku authorization: checks that Shizuku/Sui is running and has authorized QuietGate.
 
-No internet, microphone, audio capture, call log, phone state, location, or overlay permission is requested.
+INTERNET supports optional Google contact authorization/refresh. No microphone, audio capture, call log, phone state, location or overlay permission is requested.
 
 `POST_NOTIFICATIONS`, `FOREGROUND_SERVICE`, and Android 14+'s `FOREGROUND_SERVICE_SPECIAL_USE` support the user-visible protection status. The foreground notification is deliberately worded as best-effort: it does not prove that a particular Meet call was intercepted or rejected.
 
