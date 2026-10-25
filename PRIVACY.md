@@ -1,6 +1,12 @@
 # Privacy policy
 
-Applies to QuietGate 0.7-alpha. Policy revision: 2026-10-24.
+Applies to QuietGate 0.8-alpha. Policy revision: 2026-10-24.
+
+## Incident report exports
+
+Users can select retained records and optional existing files for a ZIP containing caller identities, categories, notes, imported/source labels, UTC and epoch timestamps, incident title/notes and attachment hashes. Attachments keep their original bytes and embedded metadata; original filenames are included. Up to 10 attachments, 10 MiB each / 25 MiB total. No new collection permissions, recording or location access are added. The file picker grants access to chosen files; a cloud provider may download selected attachments or upload the export under that provider's permissions. The ZIP is not encrypted. SHA-256 detects changes relative to its manifest and does not authenticate the contents. Keep an independent manifest copy.
+
+Drafts remain in activity memory/saved state during normal recreation. A temporary ZIP is written to app-private cache and deleted on normal success or failure. Process interruption may leave that file until Android cache cleanup or manual app-cache clearing. Export work is not guaranteed to survive process termination. Clear catalog/history does not delete original attachments or exported files; delete those separately. Uninstalling removes app-private data. Selected records are re-read before export to honor clearing, edits and expiry.
 
 ## What stays on the phone
 

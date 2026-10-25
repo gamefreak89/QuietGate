@@ -1,4 +1,12 @@
-# QuietGate 0.7-alpha
+# QuietGate 0.8-alpha
+
+## Incident reports (0.8-alpha)
+
+Open **Rejected-call catalog > Create incident report (ZIP)**. Select individual retained attempts, add a title and incident notes, optionally select up to 10 existing attachments, review the contents, and choose a destination through Android's document picker. No new permissions are requested.
+
+The ZIP includes a readable `report.txt`, structured `report.json`, original attachment bytes under numbered `attachments/NN.bin` paths, `README.txt`, and `SHA256SUMS.txt`. Original filenames are listed in both reports. UTC timestamps use the device clock; original epoch milliseconds and imported-record labels are preserved. Attachments belong to the report as a whole and are limited to 10 MiB each / 25 MiB total. Reports contain only selected retained records, including their category and notes. Catalog edits/expiry/clearing are resolved again before export starts.
+
+Hashes detect subsequent changes relative to a retained manifest; they do not authenticate identities, prove a recording's origin, verify timestamps or establish legal admissibility or an independently verified chain of custody. The app obtains no caller IP address or location. The ZIP is unencrypted and may contain personal data and embedded attachment metadata. Cloud document providers may upload selected files. Clear catalog does not delete exports or original attachments. A private temporary ZIP is removed on normal completion/failure; interrupted processes can leave a cache file until Android clears it or the user clears app cache. Draft selection/notes survive normal activity recreation, but export work is not guaranteed to survive process termination. Device functional verification is pending.
 
 QuietGate is a separate Android app that watches Google Meet notifications and checks exposed caller emails or phone numbers against contacts on this device. An unknown caller is declined only when Meet provides an explicit `Decline` or `Reject` notification action.
 

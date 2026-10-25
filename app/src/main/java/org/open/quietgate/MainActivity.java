@@ -131,6 +131,7 @@ public class MainActivity extends Activity {
         panel.setPadding(dp(18),dp(12),dp(18),dp(12));
         TextView info=text("Local catalog: 500 newest attempts, retained for 90 days. Labels are your assessment, not verified scam findings. Imported entries never change blocking. Export before clearing to keep an archive.",14,0xFF47585A,false);
         panel.addView(info);
+        catalogButton(panel,"Create incident report (ZIP)",()->startActivity(new Intent(this,IncidentActivity.class)));
         catalogButton(panel,"Import call logs",()->startActivityForResult(new Intent(Intent.ACTION_OPEN_DOCUMENT)
             .setType("*/*").addCategory(Intent.CATEGORY_OPENABLE),REQ_IMPORT));
         catalogButton(panel,"Export call logs (JSON)",()->startActivityForResult(new Intent(Intent.ACTION_CREATE_DOCUMENT)

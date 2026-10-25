@@ -1,5 +1,7 @@
 # Permissions and access
 
+0.8-alpha adds incident ZIP exports without new Android permissions. Android's document picker grants access to user-selected attachments and the chosen ZIP destination. A cloud provider may download attachments or upload the report. Original attachment bytes and metadata are retained in exports.
+
 | Permission/access | Purpose |
 | --- | --- |
 | READ_CONTACTS | Match Meet-exposed caller email/number against locally available Contacts. |
