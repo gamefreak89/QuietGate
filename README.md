@@ -1,4 +1,14 @@
-# QuietGate 0.11-alpha
+# QuietGate 0.12-alpha
+
+## Choose an edition
+
+**QuietGate (Google edition)** keeps the existing app ID and optional Google saved-contact connection/refresh. **QuietGate FOSS** uses a separate app ID, reads device contacts, and contains no Google client library, account integration, refresh job, or Internet permission. Both keep the organized About hub, quiet alerts, local catalog, JSON import/export, incident reports, and MIT-licensed project code.
+
+Both can be installed side by side, but each needs its own permissions and Shizuku authorization. Enable protection and notification access in only the edition you intend to use to avoid handling the same call twice. The Google edition updates the existing package; the FOSS edition starts with separate private data.
+
+See [the edition comparison and build commands](EDITIONS.md), [F-Droid preparation](F-DROID.md), and [the current changelog](CHANGELOG-README.md). A phone is unnecessary for compilation and APK inspection. No 0.12-alpha device testing, F-Droid submission, public-repository conversion, or security certification is claimed.
+
+The FOSS edition's bundled code/runtime libraries are MIT/Apache-2.0. Google Meet remains a separate proprietary app/service; this does not make the entire phone or ecosystem FOSS. The repository remains private; official F-Droid submission needs public, up-to-date source and review. The sections below describe retained earlier milestones.
 
 ## A cleaner interface
 

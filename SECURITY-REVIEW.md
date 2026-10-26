@@ -1,4 +1,8 @@
-# QuietGate 0.11-alpha source review
+# QuietGate source review — 0.12-alpha editions
+
+## Edition separation
+
+The 0.12-alpha change isolates the Google implementation/dependency/manifest/assets in a separate source set. The FOSS adapter has no account integration; FOSS omits Internet permission and uses a distinct app ID/storage/provider authority. Build-time dependency allowlisting and compiled-APK inspection check the separation. No phone data or permissions were changed. Both listeners must not be enabled together, since they can observe the same Meet notification independently. Live-device verification of these new variants is pending; the source review below covers retained shared code.
 
 Review date: 2026-10-26. This is a scoped source review and build verification, not an independent audit or security certification.
 

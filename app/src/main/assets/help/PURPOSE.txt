@@ -1,6 +1,6 @@
 QuietGate's purpose
 
-QuietGate helps reduce unwanted Google Meet calls. It compares an email address or phone number exposed by a Meet notification with contacts saved on this device and fresh contact snapshots from Google accounts you choose to connect.
+QuietGate helps reduce unwanted Google Meet calls. It compares an email address or phone number exposed by a Meet notification with contacts saved on this device. The Google edition can also use fresh snapshots from accounts you explicitly connect; the FOSS edition uses device contacts only.
 
 If the identifier is missing or has no saved match, QuietGate attempts the Decline or Reject action supplied by Meet. Quiet mode can dismiss related missed-call alerts.
 

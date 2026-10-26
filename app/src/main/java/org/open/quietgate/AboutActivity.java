@@ -25,11 +25,14 @@ public class AboutActivity extends Activity {
         TextView title=text(heading,26,true); title.setPadding(0,dp(20),0,dp(12)); panel.addView(title);
     }
     private void hub() {
-        page=""; layout("About QuietGate",false);
+        page=""; layout("About "+Edition.NAME,false);
         panel.addView(text("QuietGate helps reduce unwanted Google Meet calls using saved contacts and Meet's notification actions.",16,false));
         TextView intro=text("Free to use, with MIT-licensed project source. Explore its purpose, required and optional access, privacy policy, open-source licensing, and changelog below.",16,false);
         intro.setPadding(0,dp(12),0,dp(12)); panel.addView(intro);
-        for(String label: new String[]{"Purpose & limitations","Permissions & optional access","Privacy & data deletion","Background operation & grace timer","Contacts & quiet alerts","Google contacts & automatic refresh","Call catalog & import/export","Incident reports","Free & open-source software","MIT License","Third-party notices & licenses","Changelog","Recent decisions"}) button(label,()->open(label));
+        for(String label: new String[]{"Purpose & limitations","Permissions & optional access","Privacy & data deletion","Background operation & grace timer","Contacts & quiet alerts","Google contacts & automatic refresh","Call catalog & import/export","Incident reports","Free & open-source software","MIT License","Third-party notices & licenses","Changelog","Recent decisions"}) {
+            if (!Edition.GOOGLE_CONTACTS && label.equals("Google contacts & automatic refresh")) continue;
+            button(label,()->open(label));
+        }
         String versionName;
         try { versionName=getPackageManager().getPackageInfo(getPackageName(),0).versionName; }
         catch(android.content.pm.PackageManager.NameNotFoundException e) { versionName="unavailable"; }
@@ -38,15 +41,18 @@ public class AboutActivity extends Activity {
     private void open(String label) {
         page=label; layout(label,true);
         if(label.equals("Third-party notices & licenses")) {
-            for(String[] item:new String[][]{{"Dependency notices","THIRD_PARTY_NOTICES.txt"},{"Google integration notices","GOOGLE-AUTH-THIRD-PARTY-LICENSES.txt"},{"Shizuku MIT License","SHIZUKU-LICENSE.txt"},{"Apache License 2.0","APACHE-2.0.txt"}})
+            for(String[] item:new String[][]{{"Dependency notices","THIRD_PARTY_NOTICES.txt"},{"Google integration notices","GOOGLE-AUTH-THIRD-PARTY-LICENSES.txt"},{"Shizuku MIT License","SHIZUKU-LICENSE.txt"},{"Apache License 2.0","APACHE-2.0.txt"}}) {
+                if (!Edition.GOOGLE_CONTACTS && item[1].startsWith("GOOGLE-")) continue;
                 button(item[0],()->document(item[0],item[1]));
+            }
             return;
         }
         if(label.equals("Recent decisions")) {
             java.util.List<String> events=GuardLog.recent(this);
             panel.addView(text(events.isEmpty()?"No decisions yet.":android.text.TextUtils.join("\n\n",events),16,false));
             button("Clear recent decisions",()->new android.app.AlertDialog.Builder(this).setTitle("Clear recent decisions?")
-                .setMessage("This removes the local decision history. The call catalog and connected Google contacts are kept.")
+                .setMessage("This removes the local decision history. The call catalog is kept."
+                    + (Edition.GOOGLE_CONTACTS ? " Connected Google contacts are kept." : ""))
                 .setNegativeButton("Cancel",null).setPositiveButton("Clear",(d,w)->{GuardLog.clear(this);open(label);}).show());return;
         }
         String asset;

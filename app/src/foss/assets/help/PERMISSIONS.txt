@@ -1,0 +1,23 @@
+Required for protection
+
+Contacts: Read saved email addresses and phone numbers available through Android's Contacts provider. QuietGate FOSS does not edit contacts or connect to a Google account. Contacts synced by another app may be available through the device provider.
+
+Notification access: Android grants broad access to notifications. QuietGate FOSS filters its processing to Meet, reads exposed caller information and action buttons, and can dismiss matched missed-call alerts.
+
+Shizuku authorization: Check whether Shizuku is running and authorizes QuietGate FOSS. This remains a readiness condition; no privileged Meet call-control API is used. The FOSS edition needs its own authorization when installed beside the Google edition.
+
+Status and system access
+
+Notification permission: Show protection readiness and the grace countdown. Android 13 and later require this grant before enabling protection.
+
+Foreground service and special use: Maintain the visible protection status service. Android can still stop or delay background work.
+
+Network state: Check active Wi-Fi for protection readiness and the grace timer. This permission does not let the app open Internet connections. No SSID, IP address, or hardware address is collected.
+
+Boot completed: Recheck the saved deadline and request status restoration where Android permits it.
+
+Optional file access
+
+Android's document picker grants access to files selected for catalog import, incident attachments, and export. No broad storage permission is requested. A selected cloud document provider may use its own network access to transfer those files.
+
+QuietGate FOSS requests no Internet, Google account, microphone, audio-recording, location, phone-state, system call-log, or overlay permission. Root is not required. Active Wi-Fi is still required to enable protection; losing Wi-Fi or authorized Shizuku starts the existing 24-hour grace period.

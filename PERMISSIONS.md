@@ -1,5 +1,7 @@
 # Permissions and access
 
+0.12-alpha has two editions. FOSS excludes INTERNET and all Google account/refresh components; Google retains them for the optional connection feature. Both request device Contacts, notification access, status-notification/foreground-service access, network-state checks for Wi-Fi readiness, boot handling, and Shizuku authorization. The FOSS app ID requires its own grants. No device permission was changed while creating these builds.
+
 0.11-alpha adds no permission or dependency. Permission explanations now have their own About page, and notification-access readiness compares the exact listener component.
 
 0.10-alpha uses native Android JobScheduler for explicitly enabled background saved-contact refresh. No new Android permission or library is added. INTERNET includes these requests; ACCESS_NETWORK_STATE checks the chosen network policy; existing RECEIVE_BOOT_COMPLETED permits persisted jobs. BIND_JOB_SERVICE is a component guard restricting the refresh service to Android, not a permission granted to QuietGate. Refresh-attention notices use the existing notification grant.

@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.12-alpha — 2026-10-26
+
+- Added separate Google and FOSS build flavors with shared protection, catalog, incident-export, and About code.
+- Preserved org.open.quietgate for the Google edition; added org.open.quietgate.foss and the QuietGate FOSS label for independent installation and storage.
+- Restricted Play services Auth and all Google account/refresh code, components, help, and notices to the Google source set. FOSS has no Google libraries, account connection, refresh jobs, or Internet permission.
+- Added FOSS-specific privacy/permissions/license disclosures. Google-specific historical instrumentation sources no longer compile into the FOSS test APK.
+- Added a reviewed FOSS runtime-dependency allowlist and compiled-APK inspection of permissions, DEX type references, assets, edition markers, and package identities.
+- Added edition-aware release packaging that rejects mismatched or stale APKs and produces separately named APKs and documentation.
+- No phone is needed for builds and artifact inspection. This release has not been installed or tested on a device; previous UI/call observations do not verify the new FOSS edition.
+- F-Droid preparation is documented; public source, signing/distribution decisions, metadata, external-service review, and actual inclusion review remain pending.
+
 ## 0.11-alpha — 2026-10-26
 
 - Added a compact About hub with individual help, privacy, permissions, FOSS, license, changelog, and recent-decision pages.

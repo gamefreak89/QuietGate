@@ -1,4 +1,18 @@
-# QuietGate 0.11-alpha verification
+# QuietGate verification — 0.12-alpha editions
+
+## Current 0.12-alpha scope — no device required or used
+
+Final local results: assembleFossDebug, assembleGoogleDebug, assembleFossRelease, assembleGoogleRelease, and both existing Android-test APK targets completed successfully. lintFossDebug reported 0 errors/12 warnings; lintGoogleDebug reported 0 errors/13 warnings. Warnings concern localization, obsolete API checks/resources, and icon metadata; no lint error was disabled. Both development APK signatures verified and matched the existing development certificate. Unsigned release artifacts were inspected as non-debuggable. DEX/manifest/asset inspection passed for both build types, including zero Google type references in FOSS and retained integration in Google. ARTIFACT-INSPECTION.json contains the packaged development APK hashes, permissions, and results. No physical device or emulator was used.
+
+The two editions were compiled and inspected on the computer. Neither 0.12-alpha edition was installed on a phone. No contacts, app history, permissions, notification listeners, Shizuku grants, or phone settings were changed. Existing historical test sources were compiled for the appropriate flavors; no new instrumentation tests were added or executed.
+
+FOSS runtime dependency resolution contains five reviewed artifacts: Shizuku api, provider, aidl, and shared 13.1.5 (MIT), plus AndroidX Annotation 1.3.0 (Apache-2.0). The build-time allowlist rejects other runtime artifacts. The compiled FOSS APK was checked for its distinct app ID, absent Internet permission, absent Google DEX type references and integration types, and absent Google-only help/license assets. The Google APK retains its original app ID, Internet permission, and integration. Final build/lint/artifact results are recorded in the edition release disclosure and inspection report.
+
+The first Google-flavor lint run inspected its overlay manifest, which initially omitted the shared foreground-service declaration. The declaration was repeated in the overlay with the same specialUse type; both packaged manifests retain the shared service and type. No lint error was suppressed. FOSS includes an explicit remove rule for Internet permission; the manifest merger warns when there is no declaration to remove, which is expected.
+
+Real-device FOSS permission setup, UI, saved/unknown caller flows, export/import, background recovery, and interactions with Meet remain pending. A new app ID means old Google-edition grants do not apply to FOSS. The historical synthetic decline suite uses detached notifications/test-owned PendingIntents and is not current coverage for the live Meet-created-action guard.
+
+## Historical 0.11-alpha verification
 
 ## Current release checks — 2026-10-26
 

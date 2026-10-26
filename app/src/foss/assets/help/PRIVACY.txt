@@ -1,0 +1,19 @@
+QuietGate FOSS privacy policy
+
+Caller matching happens on your device using locally available Android contacts. QuietGate FOSS contains no Google contact client, account chooser, OAuth flow, contact download, or refresh scheduler. It requests no Internet permission and makes no direct network requests.
+
+There is no QuietGate backend, telemetry, analytics, advertising, or runtime AI. Google Meet and other installed apps operate independently under their own policies. Device contacts may have been synced by other apps; QuietGate FOSS only reads contacts already available to this Android profile.
+
+Local data
+
+The call catalog stores caller information exposed by Meet, timestamps, action status, categories, and notes. Caller identities and call outcomes are not authenticated. Up to 500 recent attempts within 90 days are retained, with pruning on access or write. Decision history is limited to 30 events. Rejection fingerprints are bounded and short-lived.
+
+This data is app-private but is not additionally encrypted by QuietGate. App backup is disabled, and explicit Android 12+ cloud-backup/device-transfer exclusions are included. Rooted devices and authorized development debugging can access private data.
+
+Exports and deletion
+
+Catalog JSON and incident ZIP exports are unencrypted and can contain personal data. Attachments keep their original bytes and embedded metadata. A cloud document provider may upload or download selected files through its own network access, even though QuietGate FOSS has no Internet permission.
+
+Clear local history & fingerprints removes local decisions, catalog entries, and rejection fingerprints after confirmation. It does not delete exports, device contacts, or Meet's history. Exports and original attachments must be deleted separately.
+
+Temporary incident ZIPs are removed after normal completion or failure. Interrupted work can leave private cache files until cache cleanup. Uninstalling removes this edition's private data. The Google-connected edition has a separate app ID and separate data; neither edition reads the other's private storage.

@@ -1,4 +1,14 @@
-# QuietGate 0.11-alpha changelog
+# QuietGate 0.12-alpha changelog
+
+## Two editions
+
+The Google edition retains the existing app ID and optional connected Google contacts. QuietGate FOSS uses a separate app ID and device contacts only. Its compiled APK excludes Google libraries, account/refresh code, Google-only notices/help, and Internet permission. Both editions share the redesigned About pages, quiet alerts, call catalog, JSON files, and incident ZIPs.
+
+FOSS runtime dependencies are limited to reviewed MIT Shizuku modules and Apache-2.0 AndroidX Annotation. The build rejects unreviewed runtime dependencies. Release packaging checks the edition marker, current changelog, and absence of Google descriptors in the FOSS APK. Complete source supports both editions; Google binaries are not bundled in the FOSS APK.
+
+Both editions still work with the external proprietary Google Meet app/service, require independent permission/Shizuku setup, and retain Wi-Fi/grace readiness behavior. Do not enable both listeners at once. The repository is private and F-Droid review has not happened. A phone is not needed to build; device checks for 0.12-alpha are pending.
+
+The following entries describe the shared 0.11-alpha interface/security work retained in both editions.
 
 ## Interface
 
