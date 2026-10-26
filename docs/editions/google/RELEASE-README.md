@@ -1,12 +1,12 @@
-# QuietGate 0.12-alpha Google edition — release disclosure
+# QuietGate 0.13-alpha Google edition — release disclosure
 
-APK: QuietGate-google-0.12-alpha.apk. App label: QuietGate. Application ID: org.open.quietgate.
+APK: QuietGate-google-0.13-alpha.apk. App label: QuietGate. Application ID: org.open.quietgate.
 
 This edition preserves optional Google saved-contact connections and manual/automatic refresh using Google Play services Auth 22.0.0. INTERNET supports authorized Google requests. Per-account automatic refresh is off by default, roughly every 12 hours when enabled; Android may delay it and snapshots expire after 24 hours. Up to ten accounts and 20,000 keyed fingerprints/account are supported. Labels/cache/settings are AES-GCM encrypted with Keystore keys in no-backup storage; tokens are not written to QuietGate files/exports. Google receives authorization/refresh requests under its own terms. There is no caller-identifier upload for matching. Complete runtime dependencies are not entirely FOSS. Google Cloud Android OAuth registration and People API setup remain prerequisites.
 
 ## Included files
 
-The named edition APK is a development/debug-signed Android build, versionCode 13. source.zip and source/ contain the complete dual-edition project with its MIT-licensed code, build declarations, license notices, existing historical verification sources, and documentation. Google binaries are not embedded in the source archive or FOSS APK. The versioned documentation ZIP, CHANGELOG-README.md, this disclosure, SHA256SUMS.txt, and release.json accompany each APK. Checksums establish integrity, not certification. No signing keys, credentials, contacts, call exports, device identifiers, or SDK paths belong in the bundle.
+The named edition APK is a development/debug-signed Android build, versionCode 14. source.zip and source/ contain the complete dual-edition project with its MIT-licensed code, build declarations, license notices, existing historical verification sources, and documentation. Google binaries are not embedded in the source archive or FOSS APK. The versioned documentation ZIP, CHANGELOG-README.md, this disclosure, SHA256SUMS.txt, and release.json accompany each APK. Checksums establish integrity, not certification. No signing keys, credentials, contacts, call exports, device identifiers, or SDK paths belong in the bundle.
 
 ## Permissions and setup
 
@@ -36,14 +36,12 @@ Application code is primarily Java, with XML resources and Gradle configuration.
 
 ## Changes in this release
 
-Two compile-time flavors share the existing protection, quiet alerts, catalog, JSON files, incident reports, organized About pages, and license/changelog navigation. Google integration classes, manifests, help, notices, and historical verification sources are restricted to the Google source set. FOSS has its own adapter, label, app ID, private storage, and accurate disclosures. Build-time dependency allowlisting rejects unreviewed FOSS compile/runtime artifacts. APK inspection checks actual package/permissions, DEX type references, edition markers, and license/help assets. Packaging rejects wrong-edition or stale-changelog APKs.
+The enable-protection popup now explains purpose, operation, limitations, required setup, and edition-specific optional access in short, scrollable sections. Google-only OAuth consent appears only in the Google edition. No permissions, dependencies, or protection-policy changes. See REQUIREMENTS-REVIEW.md and CHANGELOG.md.
 
 ## Verification and limitations
 
-Final computer checks passed: both development APKs, both unsigned non-debuggable release APKs, and the existing edition-specific test APKs compiled. FOSS lint: 0 errors/12 warnings. Google lint: 0 errors/13 warnings. Both development signatures matched the existing certificate. DEX/manifest/asset inspection passed for both editions and build types, with zero Google type references or Internet permission in FOSS. See ARTIFACT-INSPECTION.json for the packaged development APK hashes/permissions. No phone or emulator was used.
+Both development APK builds and Android lint completed. Compiled APK inspection checks edition identity, permissions, Google type references, notices, and current changelog. See ARTIFACT-INSPECTION.json and DEVICE-VERIFICATION.md for exact results and device observations. No new automated tests were added. The user's successful 0.12-alpha FOSS live-call test is user-reported evidence, not independently observed coverage of this version.
 
-Builds and artifact inspection run on the computer and do not require a phone. See DEVICE-VERIFICATION.md and the accompanying edition-inspection report for actual results. Existing instrumentation sources were compiled but not run; no new instrumentation tests were added. Neither 0.12-alpha edition was installed on a device. UI, permission setup, real caller behavior, exports, background readiness, coexistence, and endurance remain unverified for these new flavors. Earlier 0.11 device observations are historical and do not verify FOSS.
+Meet must expose a usable notification and English Decline/Reject action. Calls may ring first; identity and rejection outcomes remain unverified. Android can delay or stop background work. Phone matching uses identical normalized digits. This is not a cellular-call blocker or an independent security audit. No outage, 24-hour endurance, live OAuth, or root verification is claimed.
 
-Meet must expose a usable notification and English Decline/Reject action. Calls may ring first; caller identity and call-ending outcomes are unconfirmed. Android can stop/delay background work. Final action checks cannot make notification state and PendingIntent invocation atomic. Phone matching uses identical normalized digits, not general country-code normalization. This is not a cellular-call blocker or an independent security audit.
-
-Development APKs are debug-signed with the existing private development certificate. The Google edition's app ID is unchanged and the FOSS edition is separate. Unsigned, non-debuggable release builds can be produced with assembleFossRelease/assembleGoogleRelease, but are not installable until signed. Production distribution requires a protected signing policy; keys are excluded. No release was published, repository made public, or F-Droid submission performed by building these packages.
+APKs are development/debug builds signed with the existing private development certificate. Both retain their edition-specific package IDs and private data on normal upgrades. Keys are excluded. No publication, repository-visibility change, or F-Droid submission is implied by these packages.

@@ -1,5 +1,11 @@
 # Creating a local release
 
+## Distribution privacy preflight
+
+Packaging rejects common local-user paths, private identifiers, credential patterns, and prohibited private files. It scans included source and the APK before creating output. Optional exact identifiers can be supplied privately through the QUIETGATE_PRIVATE_IDENTIFIERS environment variable, one per line; do not commit that variable's values or put them in command-line examples. Run tools/audit_release.py against the final distributable archives as an additional check. Pattern matching is not a guarantee of anonymity.
+
+Source and documentation ZIPs use fixed entry timestamps, neutral creator-platform metadata, and no comments or extra fields. Do not edit signed APK metadata: that would invalidate its signature. Keep required license attribution, project package/version identifiers, and signing-integrity metadata. See PRIVACY-CLEANUP.md for the audit and explicit replacement-file policy.
+
 ## 0.12-alpha and later: select the edition
 
 Build with `gradle assembleFossDebug assembleGoogleDebug`. Package using `python tools/release.py --edition foss --apk app/build/outputs/apk/foss/debug/app-foss-debug.apk` and the corresponding `--edition google --apk app/build/outputs/apk/google/debug/app-google-debug.apk`. Output is version/edition-specific. Each edition has its own RELEASE-README.md under docs/editions; packaging selects it automatically. Keep CHANGELOG.md synchronized with the bundled changelog before building. Neither packaging nor builds install an APK or publish a release.

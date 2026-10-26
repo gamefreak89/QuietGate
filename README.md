@@ -1,3 +1,13 @@
+# QuietGate 0.13-alpha
+
+Distribution privacy review: see [the cleanup supplement](PRIVACY-CLEANUP.md) for audit scope, sanitized download names, checksums, and retention limits.
+
+Updated enable-protection summaries explain purpose, limits, current setup requirements, and edition-specific optional access. See [the requirements review](REQUIREMENTS-REVIEW.md), [current changelog](CHANGELOG-README.md), and [verification](DEVICE-VERIFICATION.md).
+
+The user reported a successful 0.12-alpha FOSS live-call test. This is user-reported evidence; no independently observed call result is claimed.
+
+## Historical 0.12-alpha notes
+
 # QuietGate 0.12-alpha
 
 Later verification update: QuietGate FOSS installed alongside the existing edition and passed permission setup, foreground-status-service, and UI/document checks. The original edition was restored active; FOSS is left installed but paused with notification access disabled. See [the standalone device-verification supplement](DEVICE-VERIFICATION-0.12-alpha-SUPPLEMENT.md). This does not establish live-call behavior. Earlier no-device statements describe the initial build stage, and existing release archives are preserved.
