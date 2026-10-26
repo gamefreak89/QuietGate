@@ -1,5 +1,7 @@
 # QuietGate 0.12-alpha
 
+Later verification update: QuietGate FOSS installed alongside the existing edition and passed permission setup, foreground-status-service, and UI/document checks. The original edition was restored active; FOSS is left installed but paused with notification access disabled. See [the standalone device-verification supplement](DEVICE-VERIFICATION-0.12-alpha-SUPPLEMENT.md). This does not establish live-call behavior. Earlier no-device statements describe the initial build stage, and existing release archives are preserved.
+
 ## Choose an edition
 
 **QuietGate (Google edition)** keeps the existing app ID and optional Google saved-contact connection/refresh. **QuietGate FOSS** uses a separate app ID, reads device contacts, and contains no Google client library, account integration, refresh job, or Internet permission. Both keep the organized About hub, quiet alerts, local catalog, JSON import/export, incident reports, and MIT-licensed project code.

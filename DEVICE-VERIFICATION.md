@@ -1,5 +1,7 @@
 # QuietGate verification — 0.12-alpha editions
 
+Later on-device FOSS setup, UI, and foreground-service checks are documented in [the labeled 0.12-alpha supplement](DEVICE-VERIFICATION-0.12-alpha-SUPPLEMENT.md). The no-device statements below describe the earlier build stage. Existing release archives remain unchanged; live-call verification is still pending.
+
 ## Current 0.12-alpha scope — no device required or used
 
 Final local results: assembleFossDebug, assembleGoogleDebug, assembleFossRelease, assembleGoogleRelease, and both existing Android-test APK targets completed successfully. lintFossDebug reported 0 errors/12 warnings; lintGoogleDebug reported 0 errors/13 warnings. Warnings concern localization, obsolete API checks/resources, and icon metadata; no lint error was disabled. Both development APK signatures verified and matched the existing development certificate. Unsigned release artifacts were inspected as non-debuggable. DEX/manifest/asset inspection passed for both build types, including zero Google type references in FOSS and retained integration in Google. ARTIFACT-INSPECTION.json contains the packaged development APK hashes, permissions, and results. No physical device or emulator was used.
