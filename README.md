@@ -1,6 +1,6 @@
 # QuietGate
 
-QuietGate is an Android app that acts as a best-effort safeguard against spam and unwanted Google Meet video calls for the recipient. It watches Meet notifications, compares an exposed caller email address or phone number with contacts on the device, and attempts Meet's explicit **Decline** or **Reject** action when the caller is not matched.
+QuietGate is an Android app that acts as a best-effort safeguard against spam and unwanted Google Meet video calls for the recipient. It watches Meet notifications, compares an exposed caller email address or phone number with contacts on the device, and attempts Meet's explicit **Decline** or **Reject** action when the caller is not matched.\n\n> **A first app, built in the open:** QuietGate is my first Android application. Feedback is welcome and helps shape the project—please share constructive bug reports, usability observations, and feature ideas through [GitHub Issues](https://github.com/gamefreak89/QuietGate/issues). Please remove personal caller data, phone numbers, email addresses, tokens, and private screenshots before posting.
 
 QuietGate is free and open-source software under the MIT License. Active alpha development began on October 24, 2026. The project currently has two editions:
 
