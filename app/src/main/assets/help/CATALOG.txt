@@ -1,0 +1,17 @@
+Local call catalog
+
+The catalog records caller information exposed by Meet, attempt timestamps, and whether the decline action was sent or failed. Caller identities and call outcomes remain unverified.
+
+Up to 500 recent attempts within 90 days are retained. Older records are pruned on catalog access or write. QuietGate cannot reconstruct caller identities from before the catalog was enabled.
+
+Categories and notes
+
+Tap a record to edit its category and notes. Categories are your assessments; they do not change protection rules or verify scam claims.
+
+Import and export
+
+Use Rejected-call catalog to import or export JSON. Imports merge with existing records. Duplicate records keep existing edits, and imported claims remain labeled.
+
+Supported input includes versioned QuietGate JSON and legacy array exports, up to 2 MiB and 5,000 input records. Invalid, expired, and excessively future-dated records are skipped. The retained result remains limited to 500 recent entries.
+
+Exports contain retained identities, categories, and notes. Choose a trusted destination. A cloud document provider may upload the file. Clear catalog and Clear local history remove the app's copy; exported copies must be deleted separately.

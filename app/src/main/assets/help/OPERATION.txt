@@ -1,0 +1,17 @@
+Background operation
+
+The ongoing status notification reports whether the notification listener is connected, whether the grace timer is active, and whether Wi-Fi and Shizuku are ready. These are readiness indicators; a running service does not confirm that Meet exposed or accepted a decline action.
+
+Android and device battery controls can stop or delay background work. A foreground service improves visibility but cannot guarantee uninterrupted protection.
+
+The 24-hour grace timer
+
+If active Wi-Fi or running, authorized Shizuku becomes unavailable, a saved 24-hour deadline starts. Restore both before the deadline to reset the timer.
+
+When the deadline expires, protection turns off. Reconnect Wi-Fi, start and authorize Shizuku, then tap Enable protection. Reconnecting after expiry does not automatically enable protection.
+
+The app and status notification display the countdown. Android may delay alarms, so QuietGate also checks expiry before call actions and when the app resumes.
+
+Shizuku is a readiness condition. It does not supply a Meet call-control API or make rejection stronger. On non-rooted devices, Shizuku usually needs to be started again after a reboot.
+
+The protection grace timer and Google contact snapshot freshness are separate 24-hour limits.

@@ -1,0 +1,28 @@
+# QuietGate 0.11-alpha changelog
+
+## Interface
+
+- Replaced the long About dialog with a short introduction and separate buttons for purpose, permissions, privacy, operation, contacts, Google refresh, catalog import/export, incident reports, FOSS, licenses, changelog, and recent decisions.
+- Removed reference paragraphs and decision history from the dashboard. They remain available in About.
+- Rewrote help text with clear punctuation, short paragraphs, and consistent terminology.
+- Corrected corrupted punctuation and separated complete, unchanged legal notices.
+- Added system-bar and display-cutout spacing and flexible button heights.
+- Added confirmation before clearing local history and rejection fingerprints.
+
+## Security and correctness
+
+- Added explicit Android 12+ cloud-backup and device-transfer exclusions. Relying only on allowBackup=false can leave device-transfer behavior dependent on the manufacturer.
+
+- Require an exact notification-listener component match when reporting notification access.
+- Before invoking a queued decline, recheck that the original Meet notification is still active with the same timestamp and decline action. Require the action's PendingIntent creator to be Meet. If Android cannot confirm it, skip the action.
+- These are defensive fixes from source review. No active exploitation or independently verified exploit is claimed. Android notifications can still change after the final check.
+
+## Licensing and privacy
+
+QuietGate's own code and original assets remain MIT-licensed and free to use, inspect, modify, and redistribute under the license terms. The Google integration includes dependencies with separate terms, so the complete build is not entirely FOSS. The repository was private when inspected; no public-access certification is claimed.
+
+No new permission or dependency was added. Caller matching remains local. Exports can contain personal data and remain unencrypted.
+
+## Verification
+
+See DEVICE-VERIFICATION.md and SECURITY-REVIEW.md for actual checks and limitations. This README accompanies the APK as a standalone release asset and inside the documentation archive. GitHub release assets are a flat list; folders are supplied inside ZIP files.

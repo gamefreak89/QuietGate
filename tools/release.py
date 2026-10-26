@@ -4,7 +4,7 @@ import argparse, hashlib, json, re, shutil, zipfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-DOCS = ["RELEASE-README.md", "README.md", "PRIVACY.md", "PERMISSIONS.md", "FOSS.md", "AI-DISCLOSURE.md", "CHANGELOG.md", "DEVICE-VERIFICATION.md", "LICENSE", "RELEASING.md"]
+DOCS = ["RELEASE-README.md", "README.md", "PRIVACY.md", "PERMISSIONS.md", "FOSS.md", "AI-DISCLOSURE.md", "CHANGELOG.md", "CHANGELOG-README.md", "SECURITY-REVIEW.md", "DEVICE-VERIFICATION.md", "LICENSE", "RELEASING.md", "GOOGLE-CONTACTS-SETUP.md"]
 EXCLUDED = {".git", ".gradle", "build", ".idea", "__pycache__", "releases"}
 def allowed(path):
     rel = path.relative_to(ROOT)
@@ -24,6 +24,10 @@ def main():
         if not doc.is_file() or not doc.read_text(encoding="utf-8").strip():
             parser.error("Required release documentation missing or empty: " + name)
     disclosure = (ROOT / "RELEASE-README.md").read_text(encoding="utf-8")
+    if version not in (ROOT / "CHANGELOG-README.md").read_text(encoding="utf-8").splitlines()[0]:
+        parser.error("CHANGELOG-README.md must identify the current version")
+    if (ROOT / "CHANGELOG.md").read_bytes() != (ROOT / "app/src/main/assets/CHANGELOG.md").read_bytes():
+        parser.error("Bundled changelog must match CHANGELOG.md before building")
     if version not in disclosure.splitlines()[0]:
         parser.error("RELEASE-README.md heading must identify the current version")
     for heading in ["## Included files", "## Permissions and setup", "## Privacy and local data", "## FOSS and licenses", "## Languages and AI assistance", "## Changes in this release", "## Verification and limitations"]:
@@ -51,6 +55,9 @@ def main():
     shutil.copyfile(apk, target / ("QuietGate-" + version + ".apk"))
     for name in DOCS:
         shutil.copyfile(ROOT / name, target / name)
+    with zipfile.ZipFile(target / ("QuietGate-" + version + "-documentation.zip"), "w", zipfile.ZIP_DEFLATED) as z:
+        for name in DOCS:
+            z.write(ROOT / name, "QuietGate-" + version + "-documentation/" + name)
     metadata = {"app":"QuietGate", "versionName":version, "versionCode":code, "package":"org.open.quietgate", "primaryLanguage":"Java", "runtimeAI":False, "buildType":"development/debug", "verification":"See DEVICE-VERIFICATION.md; no new tests performed by packaging"}
     (target / "release.json").write_text(json.dumps(metadata, indent=2)+"\n", encoding="utf-8")
     with (target / "SHA256SUMS.txt").open("w", encoding="utf-8", newline="\n") as out:

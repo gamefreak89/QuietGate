@@ -1,0 +1,19 @@
+Optional Google saved contacts
+
+Connect each Google account explicitly. QuietGate fetches saved email addresses and phone numbers directly from Google and keeps keyed fingerprints for local matching. A completed snapshot can match for up to 24 hours.
+
+Manual refresh pauses that account's matching until a complete refresh succeeds. A failed refresh does not activate a partial list.
+
+Automatic refresh
+
+Automatic refresh is off by default. Enable it per account to request Android background refresh about every 12 hours, with a one-hour scheduling window. The default network option requires unmetered Wi-Fi. Turning that option off permits other connected networks, including mobile data.
+
+Android may delay jobs because of battery restrictions, network availability, quotas, or force-stop. Exact execution times and continuous coverage are not guaranteed. Manual refresh remains available.
+
+A temporary background error preserves a still-fresh snapshot while retrying. Matching still expires 24 hours after the last successful refresh. If renewed consent is required, matching pauses for that account and a reconnect notice requests your attention. QuietGate does not approve consent in the background.
+
+Turning automatic refresh off, disconnecting, or deleting data cancels the related jobs. Generation checks prevent late results from restoring disabled or removed matches.
+
+Setup and limits
+
+The integration requires compatible Google Play services, Android OAuth registration for the app's package and signing certificate, and an enabled People API. Up to ten connected accounts and 20,000 identifiers per account are supported. Google client libraries have separate license terms.

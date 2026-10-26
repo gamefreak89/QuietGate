@@ -1,0 +1,17 @@
+Save the caller's Meet identity
+
+Save the exact email used by a known Meet caller in Contacts on this phone. A contact saved only by phone number does not establish a match for an unfamiliar email. QuietGate cannot automatically link an email address to a phone number.
+
+Phone matching compares digits after removing supported punctuation. It does not perform general country-code normalization.
+
+Receiving accounts
+
+The same rule applies to Meet calls received by any Google account in this Android profile. Device contacts include synced entries available in that profile. A separate work profile requires its own setup.
+
+Google Other contacts are excluded from the optional Google integration. Save them as regular contacts if needed.
+
+Quiet alerts
+
+Quiet mode dismisses missed-call notifications associated with recent rejection attempts. Matching uses notification keys or tags, or an exact single-caller identity within two minutes when Meet changes the notification key.
+
+Active calls, group summaries, and messages remain visible. An allowed caller clears its identity match. Android may briefly show or sound an alert before cleanup. Meet's internal history and QuietGate's status notification remain available.

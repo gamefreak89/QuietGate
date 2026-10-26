@@ -1,0 +1,29 @@
+Required for protection
+
+Contacts: Read saved emails and phone numbers to match caller information locally. QuietGate does not edit your contacts.
+
+Notification access: Android grants broad access to notifications. QuietGate filters its processing to Google Meet notifications, reads exposed caller information and action buttons, and can dismiss matched missed-call alerts.
+
+Shizuku authorization: Check whether Shizuku is running and has authorized QuietGate. The app does not use privileged Shizuku APIs to read other apps' private data or control Meet.
+
+Status notifications
+
+Notification permission: Show protection status, the grace countdown, and attention notices. On Android 13 and later, QuietGate asks for this permission before enabling protection.
+
+Foreground service and special use: Maintain the visible protection status service. Android can still stop or delay background work.
+
+Automatic Android permissions
+
+Network state: Check active Wi-Fi and refresh network constraints. QuietGate does not collect an IP address, SSID, or hardware address.
+
+Internet: Support optional Google authorization and saved-contact refresh. Automatic refresh runs only when you enable it for an account.
+
+Boot completed: Recheck the protection deadline and request restoration where Android permits it. Persisted refresh jobs remain subject to Android scheduling.
+
+Optional access
+
+Google saved contacts: Choose and authorize each account with read-only contacts access. QuietGate requests saved email and phone fields, not contact names, Gmail, directories, or Google Other contacts.
+
+Selected files: Android's document picker grants access to files you select for import, attachments, and export. No broad storage permission is requested.
+
+QuietGate requests no microphone, audio-recording, location, phone-state, system call-log, or overlay permission. Root is not required and does not strengthen Meet call control.
