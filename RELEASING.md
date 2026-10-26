@@ -17,6 +17,8 @@ Current deliverables are development/debug signed. Keep the existing development
 
 ## GitHub releases
 
+For 0.11-alpha and later, upload CHANGELOG-README.md as a standalone asset beside the APK and include the versioned documentation ZIP. GitHub assets do not support folders; the ZIP contains the documentation folder. Keep CHANGELOG.md identical to the bundled app/src/main/assets/CHANGELOG.md before building. Packaging checks their equality and requires the new changelog and security-review documents.
+
 Push reviewed source to the private repository first. A tag/release can later carry the versioned APK, source.zip, documentation and checksum file. No automatic publication workflow is enabled. Source folders and local release bundles are separate so binaries and private call catalogs do not enter source history accidentally.
 
 ## Mandatory disclosure for every release

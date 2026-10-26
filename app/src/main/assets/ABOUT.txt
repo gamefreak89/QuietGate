@@ -1,29 +1,7 @@
-QUIETGATE â€” PURPOSE, PERMISSIONS AND PRIVACY
+About QuietGate
 
-Purpose
-A contact-based helper for unwanted Google Meet calls. It checks an exposed caller email or phone number against Contacts on this phone. Unknown or missing identifiers trigger an attempt to invoke Meet's own Decline/Reject action. Quiet mode can dismiss related missed-call alerts. It is independent software, not affiliated with or endorsed by Google or Shizuku.
+QuietGate helps reduce unwanted Google Meet calls using caller information exposed in Meet notifications and locally available saved contacts.
 
-Limits
-This is experimental software, supplied without warranty. It cannot prove a caller is legitimate or a scammer, reveal hidden account information, block a call before Meet posts a notification, guarantee that no ringing or popup occurs, or confirm that Meet ended a call. It is not a cellular-call blocker. It depends on Meet exposing a usable notification/action, and English Decline/Reject labels are supported. Save the actual calling email; a phone-only contact does not establish that email's identity. Phone matching currently requires matching digits after punctuation removal. Work profiles, manufacturer restrictions, force-stop, reboot and future Meet changes can affect operation. Do not rely on it as your only protection.
+Open the About hub for purpose and limitations, required and optional access, privacy and data deletion, operation, FOSS, license notices, and the changelog.
 
-The 24-hour grace timer
-When either Wi-Fi or running, authorized Shizuku becomes unavailable, a saved 24-hour deadline starts. Restoring BOTH before that deadline resets the timer. At expiry protection switches off. Reconnect Wi-Fi, start and authorize Shizuku, then manually enable protection again. The app and status notification show the countdown. Android may delay background alarms or render the notification timer differently; the deadline is also checked before call actions and on app resume. Shizuku is an authorization/lease condition, not a Meet call-control API.
-
-Why access is requested
-Contacts: look up exposed caller emails/numbers locally. No contacts are edited.
-Notification Access: Android grants broad notification-listener access; QuietGate's processing filters for Meet only. This access supplies call information and action buttons and allows related alert dismissal. Review this powerful access before enabling it.
-Notifications: display the ongoing status/countdown notice.
-Foreground service (special use): keep a visible, user-enabled status service. This does not guarantee survival.
-Network state: determine whether Wi-Fi is the active connection. No IP address, SSID or hardware address is collected.
-Boot completed: recheck the saved lease and request status restoration where Android permits it.
-Shizuku authorization: check whether its service is running and authorizes QuietGate. QuietGate does not use it to query private account data or control other apps through privileged APIs.
-
-Local data and deletion
-No INTERNET permission, telemetry, analytics, ads, account enumeration, device-ID collection, microphone, recording, location, call-log or phone-state access is requested. The app processes caller identifiers in memory for matching. It stores a short local decision history with local timestamps, the grace deadline and settings. For quiet cleanup it stores bounded, temporary hashed call identifiers and salted caller fingerprints; these are pseudonymous local data, not a promise of anonymity. The Clear local history & fingerprints button removes that history/fingerprint store; Android's Clear storage or uninstall removes the remaining app settings. Device contacts, Google accounts and Meet's own history are not deleted by QuietGate. No private app data is included in the source distribution. APKs contain ordinary package/version, library and signing metadata needed for Android installation.
-
-Free and open source
-QuietGate source code and original assets are provided under the MIT License. You may inspect, use, modify and redistribute them under its terms. A buildable source archive accompanies the APK. Shizuku API libraries use their own MIT notice; AndroidX annotations use Apache 2.0. License texts and attribution follow. Open-source licensing is not certification by F-Droid, the FSF, Google Play or any security auditor. Android and Shizuku are external runtime requirements; the Gradle/Android SDK toolchain is required to build. Downloading source dependencies may require internet access on the build computer even though the app has no internet permission.
-
-Rejected-call catalog (0.6-alpha): stores Meet-exposed caller identities, attempt timestamps, and decline sent/failed status locally. These identities are not authenticated; action success is unconfirmed. Up to 500 entries from 90 days are retained, pruned on catalog access or write. No past identities can be reconstructed. JSON export uses the Android document picker and may contain personal data. Catalog Clear and Clear local history remove the app copy, not exports. No added permissions or automatic uploads. Google Other contacts may need saving as regular device contacts.
-
-Catalog import/export (0.7-alpha): open Rejected-call catalog to import/export JSON, filter categories, and tap records to edit categories and notes. Labels are user assessments and do not change protection. Imports merge with existing records; duplicates keep existing edits and imported claims are labeled. Accepts versioned QuietGate JSON and legacy array exports up to 2 MB / 5,000 input records. Invalid, expired and future records are skipped. Local storage retains 500 newest entries within 90 days; export for longer archiving. Exports contain all retained categories, identities and notes. Choosing a cloud document provider can upload through that provider; choose local storage for local-only archives. No automatic uploads or new permissions.
+QuietGate's own source and original assets use the MIT License. Google integration dependencies have separate terms. Source access and distribution remain subject to repository visibility and the included license terms.

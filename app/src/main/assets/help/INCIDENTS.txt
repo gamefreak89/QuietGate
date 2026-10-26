@@ -1,0 +1,13 @@
+Create an incident report
+
+Open Rejected-call catalog, then Create incident report (ZIP). Select attempts, add a title and notes, optionally attach files, review the report, and choose a destination.
+
+Reports include exposed caller identities, UTC and device timestamps, categories, notes, imported labels, original attachment bytes, and SHA-256 checksums. Up to ten attachments are supported, with a limit of 10 MiB per file and 25 MiB total.
+
+Privacy and interpretation
+
+ZIP files are unencrypted and may contain personal data and attachment metadata. A selected cloud provider may upload exports or download attachments. No additional Android permission is required.
+
+Checksums help detect changes to exported bytes. They do not authenticate caller identities, establish independent time, prove claims, or provide an independently verified chain of custody. QuietGate obtains no caller location or IP address.
+
+Temporary private ZIPs are deleted after normal completion or failure. Process interruption can leave cache files. Exports and original attachments must be deleted separately. Report work is not guaranteed to survive process termination.

@@ -53,6 +53,7 @@ public class MainActivity extends Activity {
 
     @Override protected void onResume() {
         super.onResume();
+        GoogleAutoRefresh.reconcile(this);
         observedPreferences = getSharedPreferences(LeaseManager.PREFS, MODE_PRIVATE);
         observedPreferences.registerOnSharedPreferenceChangeListener(stateListener);
         LeaseManager.refreshCurrent(this);
@@ -71,20 +72,22 @@ public class MainActivity extends Activity {
 
     private void render() {
         int pad = dp(22);
-        ScrollView scroll = new ScrollView(this); scroll.setFillViewport(true);
+        ScrollView scroll = new ScrollView(this); scroll.setFillViewport(true); scroll.setBackgroundColor(0xFFF2F7F6);
         content = new LinearLayout(this); content.setOrientation(LinearLayout.VERTICAL);
         content.setPadding(pad, pad, pad, dp(30)); content.setBackgroundColor(0xFFF2F7F6);
         scroll.addView(content); setContentView(scroll);
+        UiInsets.apply(scroll);
 
         TextView title = text("QuietGate", 30, 0xFF102B33, true); content.addView(title);
         TextView subtitle = text("A quiet gate for Google Meet calls.", 16, 0xFF4A5C5E, false);
         subtitle.setPadding(0, dp(5), 0, dp(20)); content.addView(subtitle);
-        state = text("", 15, 0xFF163B43, true); state.setPadding(dp(15), dp(15), dp(15), dp(15));
+        state = text("", 15, 0xFF163B43, false); state.setPadding(dp(15), dp(15), dp(15), dp(15));
         state.setBackgroundColor(0xFFDDEEEA); content.addView(state); refreshState();
-        countdown = text("", 23, 0xFF163B43, true); countdown.setPadding(dp(15), dp(12), dp(15), dp(12));
+        countdown = text("", 18, 0xFF163B43, true); countdown.setPadding(dp(15), dp(12), dp(15), dp(12));
         content.addView(countdown); refreshTimer();
 
-        addButton("Grant contacts access", v -> requestContacts());
+        addButton(checkSelfPermission(Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED
+            ? "Contacts access: allowed" : "Grant contacts access", v -> requestContacts());
         addButton("Open notification access", v -> startActivity(new Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS)));
         addButton(ShizukuStatus.isAuthorized() ? "Shizuku authorized ✓" : "Authorize through Shizuku", v -> authorizeShizuku());
         if (android.os.Build.VERSION.SDK_INT >= 33 && checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED)
@@ -95,33 +98,20 @@ public class MainActivity extends Activity {
             getSharedPreferences(LeaseManager.PREFS, MODE_PRIVATE).edit().putBoolean(RejectedCallStore.KEY_QUIET, !quiet).apply(); render();
         });
         addButton("Rejected-call catalog", v -> showCatalog());
+        addButton("Connected Google saved contacts (optional)", v -> startActivity(new Intent(this, GoogleContactsActivity.class)));
         addButton("Refresh status", v -> { LeaseManager.refreshCurrent(this); render(); });
-        addButton("About, privacy, permissions & licenses", v -> showAbout());
-        addButton("Clear local history & fingerprints", v -> {
+        addButton("About, privacy, permissions & licenses", v -> startActivity(new Intent(this, AboutActivity.class)));
+        addButton("Clear local history & fingerprints", v -> new AlertDialog.Builder(this)
+            .setTitle("Clear local history and fingerprints?")
+            .setMessage("Deletes recent decisions, the call catalog, and rejection fingerprints on this device. Exported files and connected Google contacts are kept.")
+            .setNegativeButton("Cancel", null).setPositiveButton("Clear", (dialog, which) -> {
             getSharedPreferences(LeaseManager.PREFS, MODE_PRIVATE).edit().remove("recent_events")
                     .remove(CallCatalog.KEY).remove(RejectedCallStore.KEY_RECORDS).remove("rejected_identity_salt").apply(); render();
-        });
+        }).show());
 
-        section("Quiet background operation");
-        paragraph("The ongoing status notification reports whether Android's notification listener connected, whether the 24-hour grace is active, and whether Wi-Fi and Shizuku are ready. It is a visible health indicator, not proof that Meet exposed or accepted a reject action. Android and phone-maker battery controls can still stop or delay background work; a foreground service improves visibility but cannot guarantee survival or call rejection.");
-        section("Save the caller's Meet identity");
-        paragraph("Save the exact Google email used by a known Meet caller in Contacts on this phone. A contact saved only by phone number will not match an unfamiliar email. QuietGate cannot link an email to a phone number automatically. Check both saved and unsaved test callers before relying on protection.");
-        section("All receiving accounts · quieter rejection alerts");
-        paragraph("The same contact rule applies to Meet calls arriving at any Google account in this Android profile. QuietGate checks device Contacts, including synced entries available here; it does not scan cloud accounts. A separate work profile may require its own setup.");
-        paragraph("Quiet mode dismisses missed-call alerts tied to recent rejection attempts. It matches call keys/tags, or an exact single-caller identity within two minutes when Meet changes the notification key. Active calls, group summaries, and messages stay visible. An allowed caller clears its identity match. Android may show or sound an alert briefly before cleanup. Meet's internal history and QuietGate's status notice remain available.");
-        section("Shizuku and the 24-hour grace timer");
-        paragraph("If either Wi-Fi or authorized Shizuku becomes unavailable, the 24-hour countdown starts. Both must return before the deadline to reset it. At expiry protection turns off; reconnect Wi-Fi, start and authorize Shizuku, then tap Enable protection. Reconnecting after expiry does not automatically turn protection back on. Android may delay background alarms, so expiry is also checked before call actions and when the app opens.");
-        paragraph("Shizuku does not give this app a Google Meet call-control API, access to other apps’ private data, or contacts from other devices. It does not make rejection stronger. Meet still has to show this app a call notification and an explicit Decline/Reject action. The call may ring first; success cannot be confirmed.");
-        section("Privacy");
-        paragraph("QuietGate checks only Meet notifications and device contacts. It has no internet, microphone, audio-recording, call-log, phone-state, location, or overlay permission. Contact matching and history stay on this phone. The rejected-call catalog stores caller emails or numbers exposed by Meet and attempt times, up to 500 entries for 90 days. Expired entries are pruned when the catalog is read or written. Export only to a location you trust; exported copies are outside app control.");
-
-        section("Recent decisions");
-        java.util.List<String> events = GuardLog.recent(this);
-        if (events.isEmpty()) paragraph("No decisions yet.");
-        for (String event : events) paragraph(event);
-        addButton("Clear recent decisions", v -> { GuardLog.clear(this); render(); });
-        paragraph("QuietGate is separate from Strict Meet Guard. Protection starts off and requires your explicit setup and Shizuku authorization.");
+        // Detailed help and recent decisions are available from the About hub.
     }
+
 
 
     private void showCatalog() { showCatalog("All categories"); }
@@ -131,6 +121,7 @@ public class MainActivity extends Activity {
         panel.setPadding(dp(18),dp(12),dp(18),dp(12));
         TextView info=text("Local catalog: 500 newest attempts, retained for 90 days. Labels are your assessment, not verified scam findings. Imported entries never change blocking. Export before clearing to keep an archive.",14,0xFF47585A,false);
         panel.addView(info);
+        catalogButton(panel,"Create incident report (ZIP)",()->startActivity(new Intent(this,IncidentActivity.class)));
         catalogButton(panel,"Import call logs",()->startActivityForResult(new Intent(Intent.ACTION_OPEN_DOCUMENT)
             .setType("*/*").addCategory(Intent.CATEGORY_OPENABLE),REQ_IMPORT));
         catalogButton(panel,"Export call logs (JSON)",()->startActivityForResult(new Intent(Intent.ACTION_CREATE_DOCUMENT)
@@ -240,11 +231,11 @@ public class MainActivity extends Activity {
         long remaining = LeaseManager.remaining(this);
         boolean listenerConnected = MeetRejectListener.isConnected();
         boolean statusService = GuardNotificationService.isRunning();
-        state.setText("Protection: " + (enabled ? "ON" : "OFF") + "\nContacts: " + yesNo(contacts) +
-                "   ·   Notification access: " + yesNo(notifications) + "\nMeet listener: " + (listenerConnected ? "connected" : "not confirmed") +
-                "   ·   Status service: " + (statusService ? "running" : "not running") + "\nStatus notice permission: " + yesNo(statusNotificationAllowed) +
+        state.setText("Protection: " + (enabled ? "On" : "Off") + "\nContacts: " + yesNo(contacts) +
+                "\nNotification access: " + yesNo(notifications) + "\nMeet listener: " + (listenerConnected ? "connected" : "not confirmed") +
+                "\nStatus service: " + (statusService ? "running" : "not running") + "\nStatus notifications: " + yesNo(statusNotificationAllowed) +
                 "\nShizuku: " + (shizuku ? "authorized and running" : "not ready") +
-                "   ·   Wi-Fi: " + (wifi ? "connected" : "disconnected"));
+                "\nWi-Fi: " + (wifi ? "connected" : "disconnected"));
         refreshTimer();
     }
 
@@ -255,20 +246,6 @@ public class MainActivity extends Activity {
                 ? "24-hour grace: not running\nWi-Fi and Shizuku ready" : "Grace remaining\n" + duration(remaining));
     }
 
-    private void showAbout() {
-        String[] files = {"ABOUT.txt", "LICENSE", "THIRD_PARTY_NOTICES.txt", "SHIZUKU-LICENSE.txt", "APACHE-2.0.txt"};
-        StringBuilder body = new StringBuilder();
-        for (String file : files) {
-            try (java.io.InputStream in = getAssets().open(file); java.io.ByteArrayOutputStream out = new java.io.ByteArrayOutputStream()) {
-                byte[] buffer = new byte[4096]; int count;
-                while ((count = in.read(buffer)) != -1) out.write(buffer, 0, count);
-                body.append(new String(out.toByteArray(), java.nio.charset.StandardCharsets.UTF_8)).append("\n\n");
-            } catch (java.io.IOException e) { body.append("License document unavailable: ").append(file).append('\n'); }
-        }
-        ScrollView scroll = new ScrollView(this); TextView details = text(body.toString(), 15, 0xFF163B43, false);
-        details.setPadding(dp(20), dp(12), dp(20), dp(12)); details.setTextIsSelectable(true); scroll.addView(details);
-        new AlertDialog.Builder(this).setTitle("About QuietGate").setView(scroll).setPositiveButton("Close", null).show();
-    }
 
     private void requestContacts() {
         if (checkSelfPermission(Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) { render(); return; }
@@ -327,7 +304,12 @@ public class MainActivity extends Activity {
 
     private boolean notificationAccess() {
         String listeners = Settings.Secure.getString(getContentResolver(), "enabled_notification_listeners");
-        return listeners != null && listeners.contains(getPackageName());
+        if (listeners == null) return false;
+        android.content.ComponentName expected = new android.content.ComponentName(this, MeetRejectListener.class);
+        for (String value : listeners.split(":")) {
+            if (expected.equals(android.content.ComponentName.unflattenFromString(value))) return true;
+        }
+        return false;
     }
     private boolean statusNotificationAllowed() {
         if (android.os.Build.VERSION.SDK_INT >= 33 && checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED)
@@ -354,7 +336,8 @@ public class MainActivity extends Activity {
     private void addButton(String label, View.OnClickListener click) {
         Button b = new Button(this); b.setText(label); b.setAllCaps(false); b.setTextColor(0xFFFFFFFF);
         b.setBackgroundTintList(android.content.res.ColorStateList.valueOf(0xFF17545A));
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(-1, dp(52)); lp.topMargin = dp(9);
+        b.setMinHeight(dp(52)); b.setPadding(dp(16), dp(10), dp(16), dp(10));
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(-1, -2); lp.topMargin = dp(9);
         content.addView(b, lp); b.setOnClickListener(click);
     }
     private TextView text(String value, int size, int color, boolean bold) {

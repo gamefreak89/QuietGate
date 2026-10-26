@@ -103,17 +103,23 @@ public class MeetRejectListener extends NotificationListenerService {
             boolean match = identifier != null && ContactMatcher.isSavedContact(this, identifier);
             if (match) {
                 RejectedCallStore.clearIdentity(this, identifier);
-                GuardLog.add(this, "Allowed", "Caller " + identifierKind(identifier) + " matches a device contact");
+                GuardLog.add(this, "Allowed", "Caller " + identifierKind(identifier) + " matches device or connected saved contacts");
                 return;
             }
             if (!mayActNow()) return;
+            // A saved action may outlive the ringing notification while contact lookup runs.
+            // Only invoke the same action while it is still exposed by an active Meet call.
+            if (!currentDecline(sbn, decline)) {
+                GuardLog.add(this, "Queued action skipped", "The original Meet call action is no longer current");
+                return;
+            }
             try {
                 decline.actionIntent.send();
                 RejectedCallStore.record(this, sbn, identifier);
                 CallCatalog.add(this, identifier, true);
                 main.post(this::cleanupRejectedAlerts);
-                GuardLog.add(this, "Decline invoked Â· unconfirmed", identifier == null
-                        ? "Caller identifier unavailable; Meet action was invoked" : "Caller " + identifierKind(identifier) + " not found in device contacts; Meet action was invoked");
+                GuardLog.add(this, "Decline invoked · unconfirmed", identifier == null
+                        ? "Caller identifier unavailable; Meet action was invoked" : "Caller " + identifierKind(identifier) + " not found in available saved contacts; Meet action was invoked");
             } catch (PendingIntent.CanceledException | RuntimeException e) {
                 CallCatalog.add(this, identifier, false);
                 GuardLog.add(this, "Decline failed", "Meet action could not be invoked");
@@ -140,6 +146,22 @@ public class MeetRejectListener extends NotificationListenerService {
     }
 
     protected void cancelMatchedNotification(String key) { cancelNotification(key); }
+
+    private boolean currentDecline(StatusBarNotification original, Action expected) {
+        try {
+            if (!MEET_PACKAGE.equals(expected.actionIntent.getCreatorPackage())) return false;
+            StatusBarNotification[] active=getActiveNotifications(new String[]{original.getKey()});
+            if (active == null) return false;
+            for (StatusBarNotification current : active) {
+                if (!MEET_PACKAGE.equals(current.getPackageName()) || current.getPostTime()!=original.getPostTime()) continue;
+                Notification notification=current.getNotification();
+                if (notification == null || !looksLikeCall(notification) || "missed_call".equals(notification.category)) continue;
+                Action action=findDeclineAction(notification);
+                if (action!=null && expected.actionIntent.equals(action.actionIntent)) return true;
+            }
+        } catch (RuntimeException unavailable) { /* Fail closed if Android cannot confirm the current action. */ }
+        return false;
+    }
 
     private String missedCallerIdentifier(Notification n) {
         if (n == null || !"missed_call".equals(n.category) || n.extras == null) return null;

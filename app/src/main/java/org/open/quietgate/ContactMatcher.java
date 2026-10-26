@@ -13,8 +13,11 @@ final class ContactMatcher {
         if (identifier == null || identifier.trim().isEmpty()) return false;
         String value = identifier.trim();
         ContentResolver resolver = context.getContentResolver();
-        if (value.contains("@")) return emailExists(resolver, value);
-        return phoneExists(resolver, value);
+        boolean deviceMatch = value.contains("@") ? emailExists(resolver, value) : phoneExists(resolver, value);
+        if (deviceMatch) return true;
+        // Never contact Google during a ringing call. Only a fresh, explicitly connected local snapshot can match.
+        try { return GoogleContactStore.matches(context, value); }
+        catch (Exception unavailable) { return false; }
     }
 
     private static boolean emailExists(ContentResolver resolver, String email) {

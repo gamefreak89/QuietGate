@@ -1,0 +1,8 @@
+// Optional instrumentation runner override. Does not alter production APK code.
+allprojects {
+    afterEvaluate { project ->
+        if (project.plugins.hasPlugin('com.android.application')) {
+            project.android.defaultConfig.testInstrumentationRunner = project.findProperty('quietgateVerificationRunner') ?: 'org.open.quietgate.DeviceVerification'
+        }
+    }
+}

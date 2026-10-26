@@ -1,0 +1,17 @@
+Free and open-source software
+
+QuietGate's own source code and original assets are licensed under the MIT License. The project is free to use. Anyone who receives the source may inspect it, review it for vulnerabilities, modify it, and redistribute it under the license terms. The MIT License also permits commercial use; its copyright and permission notice must be preserved.
+
+Source repository: https://github.com/gamefreak89/QuietGate
+
+Source is included with release packages. Repository access is controlled by its current GitHub visibility; a private repository requires access from its owner. Source access makes independent review possible. It does not certify that the software is free of vulnerabilities.
+
+Dependency licenses
+
+Shizuku client libraries use the MIT License. AndroidX and other components retain their own notices and licenses.
+
+The optional Google contacts integration bundles Google Play services Auth and related client libraries governed by separate Google SDK terms. Therefore, this build's complete dependency stack is not entirely FOSS, even though QuietGate's own code is MIT-licensed.
+
+Android, Google Meet, Google services, and the external Shizuku manager or server have their own terms. QuietGate claims no F-Droid, Free Software Foundation, Google Play, or independent security certification.
+
+Use the MIT License and Third-party notices & licenses buttons to read the complete notices bundled with this release.

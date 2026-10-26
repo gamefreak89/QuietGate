@@ -1,0 +1,15 @@
+QuietGate's purpose
+
+QuietGate helps reduce unwanted Google Meet calls. It compares an email address or phone number exposed by a Meet notification with contacts saved on this device and fresh contact snapshots from Google accounts you choose to connect.
+
+If the identifier is missing or has no saved match, QuietGate attempts the Decline or Reject action supplied by Meet. Quiet mode can dismiss related missed-call alerts.
+
+Limitations
+
+QuietGate is experimental software. Caller information is not authenticated. A saved match does not prove that a caller is trustworthy, and a rejected attempt does not prove that a caller is a scammer.
+
+The app depends on Meet exposing a usable notification and an English Decline or Reject action. A call may ring or display a popup before the app can act. QuietGate cannot independently confirm that Meet ended the call.
+
+QuietGate does not block cellular calls, reveal hidden account information, or obtain a caller's IP address or location. Android restrictions, work profiles, reboots, force-stops, and changes to Meet can affect operation.
+
+QuietGate is independent software. It is not affiliated with or endorsed by Google or Shizuku. The software is provided without warranty under the MIT License.

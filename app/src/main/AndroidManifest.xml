@@ -3,6 +3,7 @@
         <package android:name="moe.shizuku.privileged.api" />
     </queries>
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
@@ -11,10 +12,16 @@
 
     <application
         android:allowBackup="false"
+        android:fullBackupContent="false"
+        android:dataExtractionRules="@xml/data_extraction_rules"
         android:label="QuietGate"
         android:icon="@mipmap/ic_launcher"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="false">
+        <activity android:name=".AboutActivity" android:exported="false" />
+        <activity android:name=".GoogleContactsActivity" android:exported="false" />
+        <service android:name=".GoogleContactsRefreshService" android:permission="android.permission.BIND_JOB_SERVICE" android:exported="true" />
+        <activity android:name=".IncidentActivity" android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="true">

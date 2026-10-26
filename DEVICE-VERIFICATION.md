@@ -1,4 +1,17 @@
-# QuietGate 0.5-alpha verification
+# QuietGate 0.11-alpha verification
+
+## Current release checks — 2026-10-26
+
+- Gradle assembleDebug and lintDebug completed successfully with JDK 17, Gradle 8.9, and Android SDK/build tools 35. Android lint reported 0 errors and 14 warnings, primarily localization, obsolete API guards/resources, and launcher-icon metadata. The earlier backup-rules warning was resolved. The local Android analytics-settings write warning did not prevent the build.
+- APK signing verification passed. The new APK's certificate matched the installed development build. The app updated in place from versionCode 11 to 12 without uninstalling or clearing app data.
+- Device package metadata confirmed versionName 0.11-alpha. The dashboard continued to report protection enabled, contacts and notification access allowed, listener connected, status service running, and Wi-Fi/Shizuku ready after installation.
+- On-device navigation opened purpose, permissions, privacy, operation, contacts, Google refresh, catalog help, incident help, FOSS, MIT License, and changelog pages. Documents loaded; the in-app changelog showed the current release. Back navigation returned to About.
+- Separate dependency notices, Google notices, Shizuku MIT text, and Apache 2.0 text loaded on device. Recent decisions opened from About. The local-history confirmation was checked using Cancel; no history was deleted.
+- Screenshots were visually inspected for the About hub, dashboard, and system-bar spacing/contrast. Help no longer fills the bottom of the dashboard. Buttons use flexible heights and text remains selectable on reference pages.
+
+The current source review and defensive fixes are in SECURITY-REVIEW.md. No new instrumentation tests were added or run. The historical synthetic decline suite uses test-owned PendingIntents and detached notifications; it no longer exercises the new requirement for a live Meet-created action and must not be presented as current regression coverage. Live incoming-call checks of that guard remain pending, as do renewed Google consent, multi-device migration, rotation/large-font stress testing, and long-duration background operation. These results are not a vulnerability-free certification.
+
+## Historical 0.5-alpha verification
 
 This distributable report intentionally omits operator names, local paths, phone models/identifiers, account addresses, IP addresses and exact test-session timestamps.
 
@@ -39,3 +52,37 @@ The new local catalog compiled and the APK was installed as an update. The earli
 ## 0.7-alpha catalog organization
 
 Compiled successfully and installed as an update. Added bounded JSON import, full catalog export, duplicate detection, imported-entry labels, category filters and editable notes. No new automated or device functional tests were run for these import/export flows. Existing controlled-test results apply to the earlier core call-screening behavior.
+# 0.8-alpha incident export verification — 2026-10-24
+
+- `assembleDebug lintDebug` completed successfully with Android SDK/build-tools 35, Gradle 8.9 and JDK 17.
+- Lint: 0 errors, 18 warnings (localization, existing backup/icon/obsolete-version concerns). Compilation also reports existing Shizuku annotation/deprecated-API warnings.
+- The existing instrumentation source received a targeted lint suppression for the receiver overload used only below API 33; API 33+ already uses RECEIVER_NOT_EXPORTED. No new tests were added or executed.
+- `apksigner verify --print-certs` succeeded for the new APK and archived 0.7-alpha APK. Their SHA-256 signing-certificate digests match. This supports update compatibility; no device installation is claimed.
+- Source review covered individual record selection, re-reading for edits/expiry/clearing, imported labels, UTC/epoch timestamps, attachment limits, safe numbered ZIP paths, streamed hashing, checksum coverage, background I/O, error reporting and private temporary-file cleanup on normal completion/failure.
+- Device functional checks remain pending: file-picker grants across recreation/process death, local/cloud providers, cancellation, unreadable/oversized attachments, low storage, report correctness/hash comparison, interrupted exports, and existing catalog JSON flows. Static analysis and compilation do not demonstrate those behaviors.
+- No phone data or real caller identities were collected for this change. No new runtime permissions were added.
+
+# 0.9-alpha optional Google contacts — 2026-10-24
+
+- `assembleDebug lintDebug` completed successfully for versionCode 10 / 0.9-alpha with Google Play services Auth 22.0.0. Lint reports 0 errors and 16 warnings; compilation notes deprecated Android UI APIs.
+- `apksigner verify --print-certs` passed. The signing certificate matches the development certificate used for 0.7/0.8-alpha, and its public SHA-1 is documented for Android OAuth registration.
+- Reviewed the merged manifest: INTERNET is the new app permission; no GET_ACCOUNTS, microphone, phone-state, call-log, location, overlay, ads identifier or analytics-provider declaration was added.
+- Source review covered explicit account choice/scope checking, fixed-host HTTPS requests with redirects disabled, field/source-limited pagination, response/identifier/account bounds, no partial activation, local-only caller matching, 24-hour expiry, failed-refresh pause, encrypted no-backup cache, Keystore-protected keys, token non-persistence, exports staying separate, and generation checks preventing late reconnect after disconnect/deletion.
+- Full Google AAR third-party notices are bundled unchanged; Google client licensing is disclosed separately from MIT app code.
+- No new cloud tests, device installation, real-account authorization, download, matching, refresh expiry or remote revocation verification were performed. External Google Cloud Android OAuth registration and People API enablement are absent. Code compilation/static analysis is not evidence of live Google integration working.
+- Earlier 0.8-alpha incident/catalog verification is historical and does not cover the Google connection feature. The installed phone build remains 0.8-alpha.
+
+# 0.10-alpha automatic refresh verification — 2026-10-24
+
+- `assembleDebug`, `assembleDebugAndroidTest` and `lintDebug` passed. Lint: 0 errors, 18 warnings. APK signature verified against the same development certificate used by prior installed builds.
+- Installed versionCode 11 / 0.10-alpha after a verified private APK/app-data backup. Matching backup copies are also kept in app-private storage on the phone; no Keystore keys were exported.
+- 56 automated device checks passed, 0 failed: 19 new scheduling/state/migration checks, 4 live-job assertions across existing connected accounts, 16 incident/catalog regressions and 17 controlled core regressions.
+- Migration was compared against the original encrypted backup using the existing app Keystore key on-device. Original account identity/generation/status/success dates and contact hash sets were preserved. New auto defaults were off until explicitly enabled under user authorization.
+- New checks cover 12-hour/1-hour-flex persisted job policy, battery/network constraints, opaque extras, cancelable auto consent disclosure, encrypted options reload, background retention/retry, enable/disable/cancel, renewed-consent state, late callbacks, reconnect scheduling, periodic/one-off cancellation and preservation of other live connections. Synthetic data was individually removed; no clear-all/key deletion was performed against real account data.
+- The user-authorized connected accounts were opted into automatic refresh with unmetered Wi-Fi only. Android's actual periodic job service was triggered immediately for verification; both refreshed successfully through real Google authorization/People API using existing grants, with no consent UI and no token persistence. Persisted periodic jobs remained registered after completion. The populated list retained its expected identifier count; counts/account labels are not included in this release document.
+- Separately, the on-phone background-now button queued a one-off job without a forced scheduler command. Its success/updated timestamps were confirmed in the app. This manual UI check is additional to the 56 automated assertions.
+- Incident regression exercised actual local Android file-picker ZIP saving. Core regression used synthetic notifications/test-owned decline actions and simulated grace timestamps, not real incoming Meet calls.
+- Original core preferences/catalog were restored from the private backup and verified byte-for-byte before normal restart; new user-approved auto settings and freshly updated Google snapshots were retained. Test APK, synthetic entries/jobs/files and test baseline were removed. Normal notification access and protection readiness were restored.
+- Limits: no elapsed 12-hour/24-hour endurance run, actual reboot, Doze, battery restriction, offline recovery, real grant revocation/expiry or attention-notification delivery test; consent-required transitions were synthetic. No live incoming Meet calls or cloud document-provider checks. Job persistence flags and immediate execution do not prove every future Android scheduling condition. Snapshot expiry remains unchanged at 24 hours.
+- This stage is local only. No repository/source push, PR change, tag, GitHub release or visibility change was performed. Private backups, actual account identifiers/counts, credentials, device identifiers and call catalogs are excluded from release packaging.
+

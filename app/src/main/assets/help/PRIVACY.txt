@@ -1,0 +1,25 @@
+Privacy policy
+
+Caller matching happens on your device. QuietGate has no backend, advertisements, telemetry, analytics, or runtime AI. Caller identifiers are not sent to Google for matching.
+
+Google receives authorization and saved-contact refresh requests when you choose to connect an account. These services process requests under their own terms. Automatic refresh is optional and off by default.
+
+Local storage
+
+Connected-account labels, keyed contact fingerprints, refresh settings, and status are encrypted with AES-GCM using Android Keystore keys in app-private storage excluded from backup. QuietGate does not save OAuth tokens in its files or exports. Android refresh jobs contain opaque references rather than account names or tokens.
+
+The local call catalog stores exposed caller identities, timestamps, action status, categories, and notes. It retains up to 500 recent attempts within 90 days and prunes records on access or write. The catalog and decision history are app-private and separate from the encrypted Google contact cache.
+
+Exports
+
+Catalog JSON and incident ZIP files may contain personal data. Incident attachments retain their original bytes and embedded metadata. Exports are unencrypted. A cloud document provider may upload a saved export or download a selected attachment. Connected-account lists, caches, and tokens are excluded.
+
+Deletion
+
+Clear local history & fingerprints removes the local decision history, call catalog, and rejection fingerprints. It does not disconnect Google accounts or delete their cached matches.
+
+Use the Google contacts screen to disconnect an account or delete all connected-account data and keys. Disconnect removes local matches and scheduled jobs before requesting Google revocation. If revocation fails, manage the remaining grant in your Google account.
+
+Uninstalling removes app-private data but may leave Google grants. Exported files and original attachments must be deleted separately. QuietGate does not delete device contacts, Google accounts, or Meet's own history.
+
+Temporary incident ZIP files are removed after normal completion or failure. A process interruption can leave private cache files until cache cleanup.
