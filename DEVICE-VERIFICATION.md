@@ -1,3 +1,15 @@
+# QuietGate verification — 0.13-alpha
+
+Both development editions compiled. FOSS lint: 0 errors/12 warnings; Google lint: 0 errors/13 warnings. Compiled-APK inspection passed for both; FOSS has zero Google type references and no Internet permission. Both signatures match the existing development certificate. No new automated tests were added. See ARTIFACT-INSPECTION.json and REQUIREMENTS-REVIEW.md.
+
+Both 0.13-alpha development APKs were installed as in-place updates on an Android test device. Both enable dialogs were inspected visually and through the Android UI hierarchy with large-text accessibility settings. Purpose, matching, limits, readiness requirements, edition-specific access, and confirmation controls were present. The Google dialog scrolls to its complete footer; FOSS content and buttons fit and remain reachable. Google consent text appears only in the Google dialog; FOSS explains that Google account and Internet access are absent.
+
+The Google enable dialog was canceled. FOSS protection was temporarily paused to inspect its dialog and then re-enabled. The FOSS dashboard confirmed enabled protection, a connected listener, running status service, and satisfied setup requirements. The Google edition remained paused. Existing grants and private data were retained; no contacts or catalogs were opened or cleared, no OAuth consent or exports were performed. Notification-listener grants were left unchanged; only FOSS protection was enabled during verification.
+
+The user reported a successful 0.12-alpha FOSS live-call test. No new live call, OAuth authorization, connectivity outage, 24-hour endurance, or root behavior was independently tested for 0.13-alpha.
+
+## Historical verification
+
 # QuietGate verification — 0.12-alpha editions
 
 Later on-device FOSS setup, UI, and foreground-service checks are documented in [the labeled 0.12-alpha supplement](DEVICE-VERIFICATION-0.12-alpha-SUPPLEMENT.md). The no-device statements below describe the earlier build stage. Existing release archives remain unchanged; live-call verification is still pending.

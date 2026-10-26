@@ -13,3 +13,16 @@ __pycache__/
 *.zip
 QuietGate-call-catalog*.json
 *call-catalog*.json
+
+# Private development and verification material
+.env
+.env.*
+*.pem
+*.p12
+*.pfx
+*.key
+*.bak
+*uiautomator*.xml
+Screenshot_*.png
+**/private-backups/
+**/private-audit/

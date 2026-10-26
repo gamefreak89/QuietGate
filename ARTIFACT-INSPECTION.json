@@ -2,10 +2,10 @@
   {
     "edition": "foss",
     "package": "org.open.quietgate.foss",
-    "versionCode": 13,
-    "versionName": "0.12-alpha",
-    "bytes": 311860,
-    "sha256": "7c0f32b4bfd27f9701b9aefdba5aa4c2de77a5d015a36cb0588968502afa03d1",
+    "versionCode": 14,
+    "versionName": "0.13-alpha",
+    "bytes": 212724,
+    "sha256": "d5a0a0cc121bb99dc0bf81ea783c23488e5c19a887fe4a1ca9befb9944f9288d",
     "permissions": [
       "android.permission.ACCESS_NETWORK_STATE",
       "android.permission.FOREGROUND_SERVICE",
@@ -26,10 +26,10 @@
   {
     "edition": "google",
     "package": "org.open.quietgate",
-    "versionCode": 13,
-    "versionName": "0.12-alpha",
-    "bytes": 7305810,
-    "sha256": "6dc56b0931e389fc8aba79fe365c6a77102d64c080f1fcf4f9cc85d772c1c765",
+    "versionCode": 14,
+    "versionName": "0.13-alpha",
+    "bytes": 7159332,
+    "sha256": "520c737fa6082ab49d507f2541026e0934c10db101dc1aaf889d609d947cfbc7",
     "permissions": [
       "android.permission.ACCESS_NETWORK_STATE",
       "android.permission.FOREGROUND_SERVICE",

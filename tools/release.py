@@ -2,13 +2,14 @@
 """Create a versioned local release without building or publishing it."""
 import argparse, hashlib, json, re, shutil, zipfile
 from pathlib import Path
+from audit_release import inspect_bytes
 
 ROOT = Path(__file__).resolve().parents[1]
-DOCS = ["RELEASE-README.md", "README.md", "PRIVACY.md", "PERMISSIONS.md", "FOSS.md", "AI-DISCLOSURE.md", "CHANGELOG.md", "CHANGELOG-README.md", "SECURITY-REVIEW.md", "DEVICE-VERIFICATION.md", "LICENSE", "RELEASING.md", "GOOGLE-CONTACTS-SETUP.md", "EDITIONS.md", "F-DROID.md", "ARTIFACT-INSPECTION.json"]
+DOCS = ["RELEASE-README.md", "README.md", "PRIVACY.md", "PERMISSIONS.md", "FOSS.md", "AI-DISCLOSURE.md", "CHANGELOG.md", "CHANGELOG-README.md", "SECURITY-REVIEW.md", "DEVICE-VERIFICATION.md", "LICENSE", "RELEASING.md", "GOOGLE-CONTACTS-SETUP.md", "EDITIONS.md", "F-DROID.md", "ARTIFACT-INSPECTION.json", "REQUIREMENTS-REVIEW.md", "PRIVACY-CLEANUP.md"]
 EXCLUDED = {".git", ".gradle", "build", ".idea", "__pycache__", "releases"}
 def allowed(path):
     rel = path.relative_to(ROOT)
-    return not any(p in EXCLUDED for p in rel.parts) and path.name != "local.properties" and path.suffix.lower() not in {".apk", ".apks", ".jks", ".keystore", ".log", ".pyc", ".zip"}
+    return not any(p in EXCLUDED for p in rel.parts) and path.name not in {"local.properties", ".env"} and not path.name.startswith('.env.') and path.suffix.lower() not in {".apk", ".apks", ".jks", ".keystore", ".pem", ".p12", ".pfx", ".key", ".bak", ".log", ".pyc", ".zip"}
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--apk", required=True, type=Path)
@@ -61,9 +62,14 @@ def main():
     output = args.output.resolve()
     if output == ROOT or ROOT in output.parents:
         parser.error("Release archives must be outside the source tree")
+    sources = [p for p in sorted(ROOT.rglob("*")) if p.is_file() and not p.is_symlink() and allowed(p)]
+    findings = inspect_bytes(apk.read_bytes(), apk.name)
+    for p in sources:
+        findings += inspect_bytes(p.read_bytes(), p.relative_to(ROOT).as_posix())
+    if findings:
+        parser.error("Privacy preflight failed; inspect matched files/rules locally: " + json.dumps(findings))
     target = output / version / args.edition
     target.mkdir(parents=True, exist_ok=False)
-    sources = [p for p in sorted(ROOT.rglob("*")) if p.is_file() and not p.is_symlink() and allowed(p)]
     for p in sources:
         dest = target / "source" / p.relative_to(ROOT)
         dest.parent.mkdir(parents=True, exist_ok=True)
@@ -72,6 +78,7 @@ def main():
         for p in sources:
             info = zipfile.ZipInfo("QuietGate/" + p.relative_to(ROOT).as_posix(), (2000,1,1,0,0,0))
             info.compress_type = zipfile.ZIP_DEFLATED
+            info.create_system = 0
             info.external_attr = 0
             z.writestr(info, p.read_bytes())
     stem = "QuietGate-" + args.edition + "-" + version
@@ -80,8 +87,12 @@ def main():
         shutil.copyfile(edition_doc if name == "RELEASE-README.md" else ROOT / name, target / name)
     with zipfile.ZipFile(target / (stem + "-documentation.zip"), "w", zipfile.ZIP_DEFLATED) as z:
         for name in DOCS:
-            z.write(target / name, stem + "-documentation/" + name)
-    metadata = {"app":"QuietGate", "edition":args.edition, "versionName":version, "versionCode":code, "package":"org.open.quietgate" + (".foss" if args.edition == "foss" else ""), "primaryLanguage":"Java", "runtimeAI":False, "buildType":"development/debug", "verification":"See DEVICE-VERIFICATION.md; no device tests performed for 0.12-alpha"}
+            info = zipfile.ZipInfo(stem + "-documentation/" + name, (2000,1,1,0,0,0))
+            info.compress_type = zipfile.ZIP_DEFLATED
+            info.create_system = 0
+            info.external_attr = 0
+            z.writestr(info, (target / name).read_bytes())
+    metadata = {"app":"QuietGate", "edition":args.edition, "versionName":version, "versionCode":code, "package":"org.open.quietgate" + (".foss" if args.edition == "foss" else ""), "primaryLanguage":"Java", "runtimeAI":False, "buildType":"development/debug", "verification":"See DEVICE-VERIFICATION.md for version-specific checks and limitations"}
     (target / "release.json").write_text(json.dumps(metadata, indent=2)+"\n", encoding="utf-8")
     with (target / "SHA256SUMS.txt").open("w", encoding="utf-8", newline="\n") as out:
         for p in sorted(target.rglob("*")):

@@ -288,8 +288,8 @@ public class MainActivity extends Activity {
                     .setPositiveButton("Allow", (d, w) -> requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS}, REQ_NOTIFICATIONS)).show();
             return;
         }
-        new AlertDialog.Builder(this).setTitle("Enable QuietGate?")
-                .setMessage("QuietGate allows a caller when Meet exposes an email or phone number that matches Contacts on this phone. Save the caller's exact Meet email; a phone-only contact may not match. If the identifier is missing or not saved, it attempts Meet’s explicit Decline/Reject action. The call can ring briefly, and rejection is unconfirmed. If Wi-Fi or Shizuku stays unavailable for 24 hours, protection turns off.")
+        new AlertDialog.Builder(this).setTitle("Enable " + Edition.NAME + "?")
+                .setView(ProtectionDisclosure.create(this))
                 .setNegativeButton("Keep off", null)
                 .setPositiveButton("Enable", (d, w) -> {
                     LeaseManager.enable(this, ShizukuStatus.isAuthorized(), LeaseManager.isWifiConnected(this));

@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.13-alpha — 2026-10-26
+
+- Replaced the dense enable-protection popup with a scrollable, edition-aware summary of purpose, contact matching, limitations, required setup, and optional access.
+- Google edition explains optional read-only Google Contacts OAuth consent and Internet refresh. FOSS explains device-only contacts with no Google sign-in or Internet permission.
+- Traced both editions' requirements: Wi-Fi and authorized Shizuku remain enforced readiness conditions with a 24-hour grace period. Local matching and Meet notification actions do not use privileged Shizuku call control. No protection-policy change.
+- User reported a successful live call test with 0.12-alpha FOSS. This is user-reported evidence, not an independently observed result or proof of universal blocking.
+- No new permissions, dependencies, or security fixes. See REQUIREMENTS-REVIEW.md and DEVICE-VERIFICATION.md for scope and verification.
+
 ## 0.12-alpha — 2026-10-26
 
 - Added separate Google and FOSS build flavors with shared protection, catalog, incident-export, and About code.
