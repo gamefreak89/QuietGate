@@ -1,5 +1,11 @@
 # Creating a local release
 
+## 0.12-alpha and later: select the edition
+
+Build with `gradle assembleFossDebug assembleGoogleDebug`. Package using `python tools/release.py --edition foss --apk app/build/outputs/apk/foss/debug/app-foss-debug.apk` and the corresponding `--edition google --apk app/build/outputs/apk/google/debug/app-google-debug.apk`. Output is version/edition-specific. Each edition has its own RELEASE-README.md under docs/editions; packaging selects it automatically. Keep CHANGELOG.md synchronized with the bundled changelog before building. Neither packaging nor builds install an APK or publish a release.
+
+The remaining commands below are retained historical guidance; unflavored APK paths apply only to releases before 0.12-alpha.
+
 1. Update versionName and increment versionCode in app/build.gradle.
 2. Update CHANGELOG.md and DEVICE-VERIFICATION.md honestly; do not carry forward old results as validation of new features.
 3. Build using JDK 17, Gradle 8.9 and SDK/build tools 35: `gradle assembleDebug`.

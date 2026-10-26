@@ -1,0 +1,7 @@
+About QuietGate FOSS
+
+QuietGate FOSS helps reduce unwanted Google Meet calls using contacts available on this Android device. It attempts Meet's exposed Decline or Reject action when no saved match is available.
+
+This edition contains no Google Play services library, Google account connection, or background contact-refresh client. It requests no Internet permission.
+
+QuietGate code and original assets are MIT-licensed. Bundled Shizuku client libraries are MIT-licensed; AndroidX Annotation is Apache-2.0. Google Meet is an external proprietary app and is not included in QuietGate FOSS. F-Droid inclusion has not been approved.

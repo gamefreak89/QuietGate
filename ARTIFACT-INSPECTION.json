@@ -1,0 +1,51 @@
+[
+  {
+    "edition": "foss",
+    "package": "org.open.quietgate.foss",
+    "versionCode": 13,
+    "versionName": "0.12-alpha",
+    "bytes": 311860,
+    "sha256": "7c0f32b4bfd27f9701b9aefdba5aa4c2de77a5d015a36cb0588968502afa03d1",
+    "permissions": [
+      "android.permission.ACCESS_NETWORK_STATE",
+      "android.permission.FOREGROUND_SERVICE",
+      "android.permission.FOREGROUND_SERVICE_SPECIAL_USE",
+      "android.permission.POST_NOTIFICATIONS",
+      "android.permission.READ_CONTACTS",
+      "android.permission.RECEIVE_BOOT_COMPLETED",
+      "moe.shizuku.manager.permission.API_V23"
+    ],
+    "googleTypeReferences": 0,
+    "googleIntegrationTypeReferences": 0,
+    "googleNoticesIncluded": false,
+    "googleHelpIncluded": false,
+    "debuggable": true,
+    "result": "PASS",
+    "scope": "Compiled APK inspection only; no device/UI/live-call verification"
+  },
+  {
+    "edition": "google",
+    "package": "org.open.quietgate",
+    "versionCode": 13,
+    "versionName": "0.12-alpha",
+    "bytes": 7305810,
+    "sha256": "6dc56b0931e389fc8aba79fe365c6a77102d64c080f1fcf4f9cc85d772c1c765",
+    "permissions": [
+      "android.permission.ACCESS_NETWORK_STATE",
+      "android.permission.FOREGROUND_SERVICE",
+      "android.permission.FOREGROUND_SERVICE_SPECIAL_USE",
+      "android.permission.INTERNET",
+      "android.permission.POST_NOTIFICATIONS",
+      "android.permission.READ_CONTACTS",
+      "android.permission.RECEIVE_BOOT_COMPLETED",
+      "moe.shizuku.manager.permission.API_V23"
+    ],
+    "googleTypeReferences": 1608,
+    "googleIntegrationTypeReferences": 32,
+    "googleNoticesIncluded": true,
+    "googleHelpIncluded": true,
+    "debuggable": true,
+    "result": "PASS",
+    "scope": "Compiled APK inspection only; no device/UI/live-call verification"
+  }
+]

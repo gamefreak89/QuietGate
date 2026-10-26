@@ -15,9 +15,8 @@ final class ContactMatcher {
         ContentResolver resolver = context.getContentResolver();
         boolean deviceMatch = value.contains("@") ? emailExists(resolver, value) : phoneExists(resolver, value);
         if (deviceMatch) return true;
-        // Never contact Google during a ringing call. Only a fresh, explicitly connected local snapshot can match.
-        try { return GoogleContactStore.matches(context, value); }
-        catch (Exception unavailable) { return false; }
+        // Each edition supplies its own fallback. The FOSS build has no account integration.
+        return Edition.matches(context, value);
     }
 
     private static boolean emailExists(ContentResolver resolver, String email) {

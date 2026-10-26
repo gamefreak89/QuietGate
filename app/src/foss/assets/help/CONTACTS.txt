@@ -1,0 +1,17 @@
+Save the caller's Meet identity
+
+Save the exact email used by a known Meet caller in Contacts on this device. A phone-only contact does not establish a match for an unfamiliar email. QuietGate FOSS cannot automatically link an email address to a phone number.
+
+Phone matching compares digits after removing supported punctuation. It does not perform general country-code normalization.
+
+Device contacts only
+
+QuietGate FOSS reads Android's Contacts provider. It contains no Google account connection or saved-contact refresh feature. Contacts synced by another installed app can be available through the device provider. A separate work profile needs its own setup.
+
+The same contact-matching rule applies to Meet calls received by any account in this Android profile. Account management inside Meet is separate from QuietGate FOSS.
+
+Quiet alerts
+
+Quiet mode dismisses missed-call alerts associated with recent rejection attempts. Matching uses call keys or tags, or an exact single-caller identity within two minutes when Meet changes its notification key.
+
+Active calls, group summaries, and messages remain visible. An allowed caller clears its identity match. Android may show or sound an alert before cleanup. Meet's own history and QuietGate FOSS's status notification remain available.

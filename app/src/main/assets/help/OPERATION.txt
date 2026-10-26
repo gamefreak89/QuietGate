@@ -14,4 +14,4 @@ The app and status notification display the countdown. Android may delay alarms,
 
 Shizuku is a readiness condition. It does not supply a Meet call-control API or make rejection stronger. On non-rooted devices, Shizuku usually needs to be started again after a reboot.
 
-The protection grace timer and Google contact snapshot freshness are separate 24-hour limits.
+In the Google edition, protection grace and Google contact snapshot freshness are separate 24-hour limits. The FOSS edition has no Google contact snapshot or account-refresh timer.

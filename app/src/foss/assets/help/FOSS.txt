@@ -1,0 +1,17 @@
+Free and open-source software
+
+QuietGate FOSS contains the project's MIT-licensed code and original assets, MIT-licensed Shizuku client libraries, and Apache-2.0-licensed AndroidX Annotation. It excludes Google Play services and the account-connection feature at build time.
+
+The software is free to use. Recipients may inspect its source for vulnerabilities, modify it, and redistribute it under the applicable licenses. The MIT License permits commercial use and requires the copyright and permission notice to be preserved. Source access is not proof that software has no vulnerabilities.
+
+Source repository: https://github.com/gamefreak89/QuietGate
+
+Source accompanies release packages. A private repository still limits public access; the repository owner must make current source publicly accessible before an official F-Droid submission.
+
+External requirements
+
+Google Meet is a separate proprietary app that QuietGate FOSS works with. It is not bundled in the APK. Android supplies platform APIs; Shizuku manager or Sui is installed separately. These external programs are not made open source by QuietGate's license.
+
+This edition's bundled application code and runtime libraries use free/open-source licenses. That statement does not mean the phone, Google Meet service, or entire Android toolchain is entirely free software. No F-Droid acceptance, independent security audit, or certification is claimed. F-Droid reviewers must assess external non-free app/service requirements.
+
+Use MIT License and Third-party notices & licenses to read the complete bundled notices.

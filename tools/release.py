@@ -4,7 +4,7 @@ import argparse, hashlib, json, re, shutil, zipfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-DOCS = ["RELEASE-README.md", "README.md", "PRIVACY.md", "PERMISSIONS.md", "FOSS.md", "AI-DISCLOSURE.md", "CHANGELOG.md", "CHANGELOG-README.md", "SECURITY-REVIEW.md", "DEVICE-VERIFICATION.md", "LICENSE", "RELEASING.md", "GOOGLE-CONTACTS-SETUP.md"]
+DOCS = ["RELEASE-README.md", "README.md", "PRIVACY.md", "PERMISSIONS.md", "FOSS.md", "AI-DISCLOSURE.md", "CHANGELOG.md", "CHANGELOG-README.md", "SECURITY-REVIEW.md", "DEVICE-VERIFICATION.md", "LICENSE", "RELEASING.md", "GOOGLE-CONTACTS-SETUP.md", "EDITIONS.md", "F-DROID.md", "ARTIFACT-INSPECTION.json"]
 EXCLUDED = {".git", ".gradle", "build", ".idea", "__pycache__", "releases"}
 def allowed(path):
     rel = path.relative_to(ROOT)
@@ -12,6 +12,7 @@ def allowed(path):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--apk", required=True, type=Path)
+    parser.add_argument("--edition", required=True, choices=["google", "foss"])
     parser.add_argument("--output", type=Path, default=ROOT.parent / "QuietGate-releases")
     args = parser.parse_args()
     config = (ROOT / "app/build.gradle").read_text(encoding="utf-8")
@@ -23,7 +24,10 @@ def main():
         doc = ROOT / name
         if not doc.is_file() or not doc.read_text(encoding="utf-8").strip():
             parser.error("Required release documentation missing or empty: " + name)
-    disclosure = (ROOT / "RELEASE-README.md").read_text(encoding="utf-8")
+    edition_doc = ROOT / "docs/editions" / args.edition / "RELEASE-README.md"
+    if not edition_doc.is_file() or not edition_doc.read_text(encoding="utf-8").strip():
+        parser.error("Edition-specific release disclosure is missing")
+    disclosure = edition_doc.read_text(encoding="utf-8")
     if version not in (ROOT / "CHANGELOG-README.md").read_text(encoding="utf-8").splitlines()[0]:
         parser.error("CHANGELOG-README.md must identify the current version")
     if (ROOT / "CHANGELOG.md").read_bytes() != (ROOT / "app/src/main/assets/CHANGELOG.md").read_bytes():
@@ -36,10 +40,28 @@ def main():
     apk = args.apk.resolve()
     if not apk.is_file() or not zipfile.is_zipfile(apk):
         parser.error("Provide an existing APK archive")
+    with zipfile.ZipFile(apk) as archive:
+        try:
+            marker = archive.read("assets/EDITION.txt").decode("utf-8").strip()
+            bundled_changelog = archive.read("assets/CHANGELOG.md")
+        except KeyError:
+            parser.error("APK lacks its edition marker or changelog")
+        if marker != args.edition:
+            parser.error("APK edition does not match --edition")
+        if bundled_changelog != (ROOT / "CHANGELOG.md").read_bytes():
+            parser.error("Rebuild the APK: its bundled changelog is stale")
+        if args.edition == "foss":
+            for name in archive.namelist():
+                if name.endswith(".dex"):
+                    dex = archive.read(name)
+                    if b"Lcom/google/" in dex or b"Lorg/open/quietgate/Google" in dex:
+                        parser.error("Google classes or descriptors found in the FOSS APK")
+            if "assets/GOOGLE-AUTH-THIRD-PARTY-LICENSES.txt" in archive.namelist():
+                parser.error("Google-only license asset found in the FOSS APK")
     output = args.output.resolve()
     if output == ROOT or ROOT in output.parents:
         parser.error("Release archives must be outside the source tree")
-    target = output / version
+    target = output / version / args.edition
     target.mkdir(parents=True, exist_ok=False)
     sources = [p for p in sorted(ROOT.rglob("*")) if p.is_file() and not p.is_symlink() and allowed(p)]
     for p in sources:
@@ -52,13 +74,14 @@ def main():
             info.compress_type = zipfile.ZIP_DEFLATED
             info.external_attr = 0
             z.writestr(info, p.read_bytes())
-    shutil.copyfile(apk, target / ("QuietGate-" + version + ".apk"))
+    stem = "QuietGate-" + args.edition + "-" + version
+    shutil.copyfile(apk, target / (stem + ".apk"))
     for name in DOCS:
-        shutil.copyfile(ROOT / name, target / name)
-    with zipfile.ZipFile(target / ("QuietGate-" + version + "-documentation.zip"), "w", zipfile.ZIP_DEFLATED) as z:
+        shutil.copyfile(edition_doc if name == "RELEASE-README.md" else ROOT / name, target / name)
+    with zipfile.ZipFile(target / (stem + "-documentation.zip"), "w", zipfile.ZIP_DEFLATED) as z:
         for name in DOCS:
-            z.write(ROOT / name, "QuietGate-" + version + "-documentation/" + name)
-    metadata = {"app":"QuietGate", "versionName":version, "versionCode":code, "package":"org.open.quietgate", "primaryLanguage":"Java", "runtimeAI":False, "buildType":"development/debug", "verification":"See DEVICE-VERIFICATION.md; no new tests performed by packaging"}
+            z.write(target / name, stem + "-documentation/" + name)
+    metadata = {"app":"QuietGate", "edition":args.edition, "versionName":version, "versionCode":code, "package":"org.open.quietgate" + (".foss" if args.edition == "foss" else ""), "primaryLanguage":"Java", "runtimeAI":False, "buildType":"development/debug", "verification":"See DEVICE-VERIFICATION.md; no device tests performed for 0.12-alpha"}
     (target / "release.json").write_text(json.dumps(metadata, indent=2)+"\n", encoding="utf-8")
     with (target / "SHA256SUMS.txt").open("w", encoding="utf-8", newline="\n") as out:
         for p in sorted(target.rglob("*")):

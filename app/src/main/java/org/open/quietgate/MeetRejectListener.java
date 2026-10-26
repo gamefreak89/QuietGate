@@ -103,7 +103,7 @@ public class MeetRejectListener extends NotificationListenerService {
             boolean match = identifier != null && ContactMatcher.isSavedContact(this, identifier);
             if (match) {
                 RejectedCallStore.clearIdentity(this, identifier);
-                GuardLog.add(this, "Allowed", "Caller " + identifierKind(identifier) + " matches device or connected saved contacts");
+                GuardLog.add(this, "Allowed", "Caller " + identifierKind(identifier) + " matches available saved contacts");
                 return;
             }
             if (!mayActNow()) return;

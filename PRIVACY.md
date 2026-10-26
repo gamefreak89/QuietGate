@@ -1,6 +1,8 @@
 # Privacy policy
 
-Applies to QuietGate 0.11-alpha. Policy revision: 2026-10-26.
+Applies to QuietGate 0.12-alpha, Google and FOSS editions. Policy revision: 2026-10-26.
+
+The FOSS edition has a separate app ID and private storage, no Internet permission, no Google account connection/cache, and no contact-refresh requests/jobs. It reads contacts already available through Android's device Contacts provider. The optional Google/account/refresh sections below apply only to the Google edition. Both editions keep app-private catalog/history/fingerprints, unencrypted user-selected exports, and backup/transfer exclusions. Other apps, such as Meet, contact-sync apps, and selected cloud document providers, can independently use their own network access.
 
 Version 0.11-alpha adds explicit Android 12+ cloud-backup and device-transfer exclusions for app data. It adds no new permission, collection, or network destination. Help and privacy disclosures are now separate pages in About. Local history deletion requires confirmation; connected Google data remains separately managed.
 

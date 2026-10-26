@@ -1,60 +1,49 @@
-# QuietGate 0.11-alpha — release README and disclosure
+# QuietGate 0.12-alpha — two-edition release disclosure
 
-Prepared 2026-10-26. Development/debug-signed Android build, versionCode 12. This release reorganizes the interface and hardens notification readiness, queued actions, and data-transfer exclusions. See DEVICE-VERIFICATION.md for actual checks and remaining limits.
+Google edition: org.open.quietgate, optional Google saved-contact integration, separate Google SDK dependencies, and INTERNET.
+
+FOSS edition: org.open.quietgate.foss, device contacts only, no Google client library or INTERNET. Both share MIT-licensed project code; FOSS runtime libraries are MIT/Apache-2.0. Select the matching docs/editions release README; tools/release.py places it beside the corresponding APK. See EDITIONS.md.
 
 ## Included files
 
-- QuietGate-0.11-alpha.apk: Android application.
-- source.zip and source/: project sources, existing verification tools, licenses, and documentation.
-- CHANGELOG-README.md: standalone readable release changes, provided beside the APK.
-- QuietGate-0.11-alpha-documentation.zip: a documentation folder containing the changelog, disclosure, security review, and supporting documents.
-- SHA256SUMS.txt: hashes for all packaged files except itself.
-- release.json: version and build metadata.
-
-GitHub assets are a flat list. Upload the APK, source.zip, CHANGELOG-README.md, RELEASE-README.md, documentation ZIP, and checksum file as separate assets. The ZIP contains the requested documentation folder. No private device data, signing keys, OAuth tokens, or SDK paths belong in the distribution.
+The named edition APK is a development/debug-signed Android build, versionCode 13. source.zip and source/ contain the complete dual-edition project with its MIT-licensed code, build declarations, license notices, existing historical verification sources, and documentation. Google binaries are not embedded in the source archive or FOSS APK. The versioned documentation ZIP, CHANGELOG-README.md, this disclosure, SHA256SUMS.txt, and release.json accompany each APK. Checksums establish integrity, not certification. No signing keys, credentials, contacts, call exports, device identifiers, or SDK paths belong in the bundle.
 
 ## Permissions and setup
 
-READ_CONTACTS reads saved caller identifiers. Android Notification Access is broad, while QuietGate filters its processing to Meet. POST_NOTIFICATIONS and foreground-service declarations support visible status and attention notices. ACCESS_NETWORK_STATE checks Wi-Fi and refresh constraints. INTERNET supports optional Google authorization and manual or explicitly enabled automatic saved-contact refresh. RECEIVE_BOOT_COMPLETED supports lease restoration and native persisted jobs. BIND_JOB_SERVICE and the notification-listener binding permission protect exported system services; they do not grant privileged access to QuietGate.
+Both editions use READ_CONTACTS for local matching, broad Android notification access filtered to Meet, POST_NOTIFICATIONS and foreground-service declarations for status, ACCESS_NETWORK_STATE for Wi-Fi readiness, RECEIVE_BOOT_COMPLETED for restoration, and the Shizuku API authorization. Notification-listener binding and privileged Shizuku provider permissions protect their components. Root is optional and unverified; it does not strengthen Meet control. Shizuku is a readiness condition, not a privileged Meet call-control API.
 
-No new permission or library was added in 0.11-alpha. No microphone, recording, location, phone-state, system call-log, overlay, or GET_ACCOUNTS permission is requested. Document pickers grant access to selected files.
+Active Wi-Fi and running, authorized Shizuku are still needed to enable protection. Losing either starts a saved 24-hour grace timer. After expiry, restore both and manually enable protection. The FOSS app ID needs independent grants; no grants or private data migrate automatically. Installations can coexist, but enable notification access/protection in only one edition to avoid handling the same call twice.
 
-Active Wi-Fi and running, authorized Shizuku are required to enable protection. If either becomes unavailable, a separate 24-hour grace deadline starts. After expiry, restore both and manually enable protection. Root is optional, unverified, and does not strengthen Meet control. Shizuku supplies readiness checks rather than a privileged Meet call-control API.
-
-Google saved contacts are optional and individually authorized using contacts.readonly. Google Cloud Android OAuth registration for the package/signing certificate and People API enablement are external prerequisites. Saved email/phone fields are fetched; Other contacts, Gmail, directories, and names are excluded. Automatic refresh is off by default and runs about every 12 hours when enabled, subject to Android scheduling and network/battery constraints. Its snapshot expires 24 hours after success. See GOOGLE-CONTACTS-SETUP.md.
+Document pickers grant access to selected catalog imports, report attachments, and export destinations. No broad storage, microphone, recording, location, phone-state, system call-log, or overlay permission is requested. See PERMISSIONS.md and EDITIONS.md for edition differences.
 
 ## Privacy and local data
 
-Caller matching is local. There is no QuietGate backend, advertising, analytics, telemetry, or runtime AI. Google receives authorization and contact-refresh requests under its own terms, but caller identifiers are not uploaded for matching.
+Caller matching stays on-device. There is no QuietGate backend, telemetry, analytics, advertising, or runtime AI. Both editions keep private call records, decision history, and bounded rejection fingerprints. Call catalogs retain 500 newest attempts within 90 days, pruned on access/write; identities and action outcomes are unverified. Decision history is limited to 30 events. Local catalog/preferences are private but not additionally encrypted by the app. Backup is disabled and explicit cloud/device-transfer exclusions apply. Rooted/compromised devices and authorized development debugging are outside that boundary.
 
-Connected-account labels, keyed identifier fingerprints, refresh settings/status, and opaque scheduling metadata are AES-GCM encrypted using Android Keystore keys in no-backup storage. QuietGate does not write OAuth tokens to its files or exports. Android job extras contain opaque references, not account names or tokens. Up to ten accounts and 20,000 fingerprints per account are supported. Generation checks prevent late refresh results from restoring removed or disabled matches.
+JSON and incident ZIP exports are unencrypted and can contain identities, timestamps, categories, notes, and original attachment bytes/metadata. A cloud document provider can transfer selected files using its own network access, including from the FOSS edition. Incident limits remain ten files, 10 MiB/file, and 25 MiB total. Temporary ZIPs are deleted on normal completion/failure; interrupted work can leave private cache files. Exported copies and original attachments require separate deletion. Hashes do not establish authenticated identity, independently verified time, or chain of custody.
 
-The call catalog and recent decisions are app-private, but do not use the Google-cache encryption keys. The catalog retains up to 500 newest attempts within 90 days, pruning on access/write. Rejection fingerprints are bounded and short-lived. Clear local history & fingerprints deletes decisions, catalog, and rejection fingerprints after confirmation; connected Google data remains separate.
-
-Disconnect removes local matches and scheduled jobs before requesting Google revocation. Delete-all removes local connected data and keys; remaining Google grants require separate management. Device contacts and Meet history are not deleted. Uninstall removes private app data but may leave Google grants. Explicit Android 12+ cloud-backup and device-transfer exclusions supplement allowBackup=false. Privileged/debug access can still read app data; this is not a production-hardened build.
-
-JSON and incident ZIP exports are unencrypted and may contain caller identities, timestamps, notes, categories, and original attachment bytes/metadata. Cloud file providers may transfer selected files. Connected-account caches, lists, and tokens are excluded from call exports. Incident limits are ten files, 10 MiB per file, and 25 MiB total. Temporary ZIPs are deleted on normal completion/failure, but interruption can leave private cache files. Exports and original attachments require separate deletion. Checksums do not authenticate identities, claims, or timestamps.
+Clear local history & fingerprints requires confirmation and removes this edition's decisions, catalog, and rejection fingerprints. It does not delete device contacts, Meet history, exports, or another edition's private storage. Uninstall removes the selected edition's private data. The Google edition's separate account cache and grants require its dedicated disconnect/delete controls; Google-side grants can survive uninstall.
 
 ## FOSS and licenses
 
-QuietGate's own code and original assets are MIT-licensed and free to use, inspect, modify, and redistribute under those terms, including commercial use with required notices preserved. Release packages include source. The GitHub repository was private when inspected on 2026-10-26; public accessibility requires an explicit visibility decision by the owner.
+Project code and original assets are MIT-licensed and free to use, inspect, modify, and redistribute with required notices preserved. Commercial use is permitted under MIT. Shizuku 13.1.5 client modules are MIT and AndroidX Annotation 1.3.0 is Apache-2.0. Full texts and notices are bundled. Google dependencies belong only to the Google edition and have separate Google SDK terms. The FOSS APK excludes those dependencies.
 
-The optional Google integration includes Google Play services Auth 22.0.0 and transitive libraries with separate Google SDK terms and third-party notices. The complete dependency stack is not entirely FOSS. Shizuku client libraries 13.1.5 are MIT-licensed, and AndroidX components retain separate notices. Android, Meet, Google services, and the external Shizuku manager/server have their own terms. No F-Droid, FSF, Google Play, or independent security certification is claimed. Full license texts remain bundled and accessible from About.
+Google Meet is a separate proprietary app/service used by both editions. Android, the external Shizuku manager/server, and build tools have their own licenses/terms. FOSS licensing of bundled code is not a claim that the whole phone/ecosystem is FOSS, vulnerability-free, certified, or accepted by F-Droid. The source repository remains private; public current source and F-Droid review are still required. See FOSS.md and F-DROID.md.
 
 ## Languages and AI assistance
 
-The application is written primarily in Java, with XML resources, Gradle build configuration, and Python packaging. UI and documentation are English. AI assisted the implementation, wording, and source review. No AI model runs in the app or makes caller decisions. See AI-DISCLOSURE.md.
+Application code is primarily Java, with XML resources and Gradle configuration. Packaging and APK inspection use Python. UI and documentation are English. AI assisted implementation, documentation, and source review. No AI model executes in the app or makes caller decisions. See AI-DISCLOSURE.md.
 
 ## Changes in this release
 
-A concise About hub replaces the combined legal/help dialog. Purpose, permissions, privacy, operation, contacts, Google refresh, catalog files, incident reports, FOSS, complete legal notices, changelog, and recent decisions have separate buttons. The dashboard no longer appends long reference paragraphs. Copy, punctuation, encoding, system-bar spacing, contrast, and button wrapping were improved. History deletion now requires confirmation.
-
-Security hardening compares the exact enabled-listener component, checks that queued Meet decline actions remain current and were created by Meet, and explicitly excludes app data from cloud backup and device transfer. See CHANGELOG.md, CHANGELOG-README.md, and SECURITY-REVIEW.md.
+Two compile-time flavors share the existing protection, quiet alerts, catalog, JSON files, incident reports, organized About pages, and license/changelog navigation. Google integration classes, manifests, help, notices, and historical verification sources are restricted to the Google source set. FOSS has its own adapter, label, app ID, private storage, and accurate disclosures. Build-time dependency allowlisting rejects unreviewed FOSS compile/runtime artifacts. APK inspection checks actual package/permissions, DEX type references, edition markers, and license/help assets. Packaging rejects wrong-edition or stale-changelog APKs.
 
 ## Verification and limitations
 
-Build, static-analysis, signature, install, and UI verification results are recorded in DEVICE-VERIFICATION.md. Existing historical test results do not establish coverage for these changes. No live caller rejection, renewed Google consent, cross-device migration, exhaustive vulnerability scan, or endurance test is claimed for this release.
+Final computer checks passed: both development APKs, both unsigned non-debuggable release APKs, and the existing edition-specific test APKs compiled. FOSS lint: 0 errors/12 warnings. Google lint: 0 errors/13 warnings. Both development signatures matched the existing certificate. DEX/manifest/asset inspection passed for both editions and build types, with zero Google type references or Internet permission in FOSS. See ARTIFACT-INSPECTION.json for the packaged development APK hashes/permissions. No phone or emulator was used.
 
-Meet caller information is unauthenticated. Calls may ring before an exposed action can be invoked. Android can delay or stop background work. QuietGate cannot independently confirm that a call ended and does not block cellular calls. English Decline/Reject action labels are supported. Final action checks narrow a race window but cannot make Android notification state and PendingIntent.send atomic.
+Builds and artifact inspection run on the computer and do not require a phone. See DEVICE-VERIFICATION.md and the accompanying edition-inspection report for actual results. Existing instrumentation sources were compiled but not run; no new instrumentation tests were added. Neither 0.12-alpha edition was installed on a device. UI, permission setup, real caller behavior, exports, background readiness, coexistence, and endurance remain unverified for these new flavors. Earlier 0.11 device observations are historical and do not verify FOSS.
 
-The APK uses the existing development/debug signing certificate to update the installed app without uninstalling it. Keep signing material private. Production distribution requires a protected release-signing plan. SHA-256 checksums establish byte integrity, not security certification.
+Meet must expose a usable notification and English Decline/Reject action. Calls may ring first; caller identity and call-ending outcomes are unconfirmed. Android can stop/delay background work. Final action checks cannot make notification state and PendingIntent invocation atomic. Phone matching uses identical normalized digits, not general country-code normalization. This is not a cellular-call blocker or an independent security audit.
+
+Development APKs are debug-signed with the existing private development certificate. The Google edition's app ID is unchanged and the FOSS edition is separate. Unsigned, non-debuggable release builds can be produced with assembleFossRelease/assembleGoogleRelease, but are not installable until signed. Production distribution requires a protected signing policy; keys are excluded. No release was published, repository made public, or F-Droid submission performed by building these packages.

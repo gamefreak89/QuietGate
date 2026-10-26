@@ -12,13 +12,48 @@ android {
         minSdk 29
         targetSdk 35
         testInstrumentationRunner 'org.open.quietgate.DeviceVerification'
-        versionCode 12
-        versionName '0.11-alpha'
+        versionCode 13
+        versionName '0.12-alpha'
+    }
+
+    flavorDimensions 'edition'
+    productFlavors {
+        google {
+            dimension 'edition'
+            resValue 'string', 'app_name', 'QuietGate'
+        }
+        foss {
+            dimension 'edition'
+            applicationIdSuffix '.foss'
+            resValue 'string', 'app_name', 'QuietGate FOSS'
+        }
     }
 }
 
 dependencies {
-    implementation 'com.google.android.gms:play-services-auth:22.0.0'
+    compileOnly 'androidx.annotation:annotation:1.3.0'
+    googleImplementation 'com.google.android.gms:play-services-auth:22.0.0'
     implementation 'dev.rikka.shizuku:api:13.1.5'
     implementation 'dev.rikka.shizuku:provider:13.1.5'
+}
+
+// Every new FOSS dependency needs a license review before it may enter an APK.
+tasks.register('verifyFossDependencies') {
+    doLast {
+        def allowed = ['dev.rikka.shizuku:api:13.1.5', 'dev.rikka.shizuku:provider:13.1.5',
+            'dev.rikka.shizuku:aidl:13.1.5', 'dev.rikka.shizuku:shared:13.1.5',
+            'androidx.annotation:annotation:1.3.0'] as Set
+        ['fossDebugCompileClasspath', 'fossReleaseCompileClasspath',
+         'fossDebugRuntimeClasspath', 'fossReleaseRuntimeClasspath'].each { name ->
+            def resolved = configurations.getByName(name).resolvedConfiguration.resolvedArtifacts
+                .collect { it.moduleVersion.id.toString() } as Set
+            def unexpected = resolved - allowed
+            if (!unexpected.empty) throw new GradleException("Unreviewed FOSS dependencies: ${unexpected}")
+            println "${name}: reviewed MIT/Apache-2.0 dependencies only (${resolved.size()})"
+        }
+    }
+}
+tasks.configureEach { task ->
+    if (task.name == 'preFossDebugBuild' || task.name == 'preFossReleaseBuild')
+        task.dependsOn 'verifyFossDependencies'
 }

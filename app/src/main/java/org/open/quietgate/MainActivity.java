@@ -53,7 +53,7 @@ public class MainActivity extends Activity {
 
     @Override protected void onResume() {
         super.onResume();
-        GoogleAutoRefresh.reconcile(this);
+        Edition.reconcile(this);
         observedPreferences = getSharedPreferences(LeaseManager.PREFS, MODE_PRIVATE);
         observedPreferences.registerOnSharedPreferenceChangeListener(stateListener);
         LeaseManager.refreshCurrent(this);
@@ -78,7 +78,7 @@ public class MainActivity extends Activity {
         scroll.addView(content); setContentView(scroll);
         UiInsets.apply(scroll);
 
-        TextView title = text("QuietGate", 30, 0xFF102B33, true); content.addView(title);
+        TextView title = text(Edition.NAME, 30, 0xFF102B33, true); content.addView(title);
         TextView subtitle = text("A quiet gate for Google Meet calls.", 16, 0xFF4A5C5E, false);
         subtitle.setPadding(0, dp(5), 0, dp(20)); content.addView(subtitle);
         state = text("", 15, 0xFF163B43, false); state.setPadding(dp(15), dp(15), dp(15), dp(15));
@@ -98,12 +98,14 @@ public class MainActivity extends Activity {
             getSharedPreferences(LeaseManager.PREFS, MODE_PRIVATE).edit().putBoolean(RejectedCallStore.KEY_QUIET, !quiet).apply(); render();
         });
         addButton("Rejected-call catalog", v -> showCatalog());
-        addButton("Connected Google saved contacts (optional)", v -> startActivity(new Intent(this, GoogleContactsActivity.class)));
+        if (Edition.GOOGLE_CONTACTS)
+            addButton("Connected Google saved contacts (optional)", v -> startActivity(Edition.contactSettings(this)));
         addButton("Refresh status", v -> { LeaseManager.refreshCurrent(this); render(); });
         addButton("About, privacy, permissions & licenses", v -> startActivity(new Intent(this, AboutActivity.class)));
         addButton("Clear local history & fingerprints", v -> new AlertDialog.Builder(this)
             .setTitle("Clear local history and fingerprints?")
-            .setMessage("Deletes recent decisions, the call catalog, and rejection fingerprints on this device. Exported files and connected Google contacts are kept.")
+            .setMessage("Deletes recent decisions, the call catalog, and rejection fingerprints on this device. Exported files are kept."
+                + (Edition.GOOGLE_CONTACTS ? " Connected Google contacts are kept." : ""))
             .setNegativeButton("Cancel", null).setPositiveButton("Clear", (dialog, which) -> {
             getSharedPreferences(LeaseManager.PREFS, MODE_PRIVATE).edit().remove("recent_events")
                     .remove(CallCatalog.KEY).remove(RejectedCallStore.KEY_RECORDS).remove("rejected_identity_salt").apply(); render();
